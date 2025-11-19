@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours Interactif : Programmation Déclarative et Logique Propositionnelle</title>
+    <style>
+        :root {
+            --color-primary: #4a6782;
+            --color-accent: #e67e22;
+            --color-text: #333333;
+            --color-bg: #fdfdfd;
+            --color-light-gray: #f4f4f4;
+            --color-border: #dddddd;
+            --font-body: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-code: 'Courier New', monospace;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-top: 30px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background-color: #e7e7e7;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: var(--color-light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--color-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* Callout Boxes */
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+            background-color: var(--color-light-gray);
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .box.definition { border-color: #4285F4; }
+        .box.definition .box-title { color: #4285F4; }
+        .box.example { border-color: #34A853; }
+        .box.example .box-title { color: #34A853; }
+        .box.warning { border-color: #FBBC05; background-color: #fffbeb;}
+        .box.warning .box-title { color: #FBBC05; }
+        .box.exercise { border-color: #EA4335; }
+        .box.exercise .box-title { color: #EA4335; }
+
+        /* Interactive Details for Exercises */
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: var(--color-light-gray);
+        }
+        .solution {
+            padding: 10px 15px;
+            margin-top: 5px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            text-align: center;
+        }
+        th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: var(--color-light-gray);
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Math symbols */
+        .logic {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        
+        /* Table of Contents */
+        #toc {
+            background: var(--color-light-gray);
+            border: 1px solid var(--color-border);
+            border-radius: 5px;
+            padding: 15px 25px;
+            margin-bottom: 40px;
+        }
+        #toc h3 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--color-primary);
+        }
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #toc ul li {
+            margin-bottom: 8px;
+        }
+        #toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Cours Interactif : Programmation Déclarative et IA</h1>
+
+        <nav id="toc">
+            <h3>Table des Matières</h3>
+            <ul>
+                <li><a href="#part1">Partie 1 : Introduction à la Programmation Déclarative</a>
+                    <ul>
+                        <li><a href="#section1-1">1.1. Déclaratif vs. Impératif : Le "QUOI" contre le "COMMENT"</a></li>
+                        <li><a href="#section1-2">1.2. Les Formes de Programmation Déclarative</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part2">Partie 2 : La Logique Propositionnelle</a>
+                    <ul>
+                        <li><a href="#section2-1">2.1. Syntaxe : Le Langage des Propositions</a></li>
+                        <li><a href="#section2-2">2.2. Sémantique : Le Sens des Formules</a></li>
+                        <li><a href="#section2-3">2.3. Conséquence Logique</a></li>
+                        <li><a href="#section2-4">2.4. Exercices d'Application du Cours</a></li>
+                        <li><a href="#section2-5">2.5. Équivalences et Formes Normales</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part3">Partie 3 : Démonstration de Théorèmes</a>
+                    <ul>
+                        <li><a href="#section3-1">3.1. Preuve par Résolution</a></li>
+                        <li><a href="#section3-2">3.2. Les Limites de la Logique Propositionnelle</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part4">Partie 4 : Corrigés des Travaux Dirigés</a>
+                    <ul>
+                        <li><a href="#td1">Exercice 1</a></li>
+                        <li><a href="#td2">Exercice 2</a></li>
+                        <li><a href="#td3">Exercice 3</a></li>
+                        <li><a href="#td4">Exercice 4</a></li>
+                        <li><a href="#td5">Exercice 5</a></li>
+                        <li><a href="#td6">Exercice 6</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <h2 id="part1">Partie 1 : Introduction à la Programmation Déclarative</h2>
+
+        <h3 id="section1-1">1.1. Déclaratif vs. Impératif : Le "QUOI" contre le "COMMENT"</h3>
+
+        <p>En informatique, il existe deux grandes familles (paradigmes) pour dire à un ordinateur quoi faire. La différence fondamentale réside dans le niveau d'abstraction.</p>
+
+        <div class="box definition">
+            <div class="box-title">Programmation Impérative</div>
+            On décrit le <strong>COMMENT</strong>. On donne une séquence d'instructions précises (algorithmes) que la machine doit exécuter pour arriver à la solution.
+            <br><em>Exemples : C, Java, Python.</em>
+        </div>
+
+        <div class="box definition">
+            <div class="box-title">Programmation Déclarative</div>
+            On décrit le <strong>QUOI</strong>. On décrit le résultat souhaité, le problème, sans expliquer comment l'obtenir. Le système sous-jacent se charge de trouver la solution.
+        </div>
+        
+        <div class="box example">
+            <div class="box-title">Exemple : Le HTML</div>
+            Une page HTML est un excellent exemple de langage déclaratif. Le code décrit <strong>ce que</strong> la page contient : un titre, des paragraphes, des images, etc. Il ne décrit pas <strong>comment</strong> le navigateur doit dessiner les pixels à l'écran, gérer les polices de caractères ou positionner les éléments.
+            <pre><code>&lt;h1&gt;Mon Titre&lt;/h1&gt;
+&lt;p&gt;Ceci est un paragraphe.&lt;/p&gt;</code></pre>
+            <p>On déclare notre intention, le navigateur s'occupe du reste.</p>
+        </div>
+
+        <div class="box exercise">
+            <div class="box-title">Mini-Exercice</div>
+            Le langage SQL (utilisé pour interroger les bases de données) est un langage déclaratif. Expliquez pourquoi en une phrase.
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    En SQL, on décrit les données que l'on souhaite récupérer (le "quoi"), mais pas l'algorithme que le système de base de données doit utiliser pour les trouver et les assembler (le "comment").
+                </div>
+            </details>
+        </div>
+
+        <h3 id="section1-2">1.2. Les Formes de Programmation Déclarative</h3>
+        <p>Le paradigme déclaratif regroupe plusieurs sous-familles :</p>
+        <ul>
+            <li><strong>Programmation Descriptive :</strong> Utilisée pour décrire des structures de données, avec une expressivité réduite.
+                <ul><li>Exemples : HTML, XML.</li></ul>
+            </li>
+            <li><strong>Programmation Fonctionnelle :</strong> Voit les applications comme un ensemble de fonctions mathématiques pures, sans état ni effet de bord.
+                <ul><li>Exemples : LISP, Caml, Haskell.</li></ul>
+            </li>
+            <li><strong>Programmation Logique :</strong> Les composants d'une application sont des relations et des règles logiques. On pose une question (une requête) au système, qui déduit la réponse à partir des faits et règles connus.
+                <ul><li>Exemples : Prolog, Mercury.</li></ul>
+            </li>
+        </ul>
+        <p>Ce cours se concentrera sur la <strong>programmation logique</strong>, qui est au cœur de nombreux domaines de l'Intelligence Artificielle.</p>
+
+        <h2 id="part2">Partie 2 : La Logique Propositionnelle</h2>
+        <p>La programmation logique repose sur... la logique ! Nous allons commencer par la forme la plus fondamentale : la logique des propositions (ou calcul propositionnel), aussi appelée logique d'ordre 0.</p>
+        <p>Pour étudier ce système formel, nous devons aborder trois aspects :</p>
+        <ol>
+            <li><strong>La Syntaxe :</strong> Comment écrire des formules correctes ?</li>
+            <li><strong>La Sémantique :</strong> Quelle est la signification (valeur de vérité) de ces formules ?</li>
+            <li><strong>La Déduction :</strong> Comment démontrer de nouveaux résultats à partir de ce que l'on sait déjà ?</li>
+        </ol>
+
+        <h3 id="section2-1">2.1. Syntaxe : Le Langage des Propositions</h3>
+        <p>La syntaxe définit le vocabulaire et la grammaire de notre langage.</p>
+        
+        <h4>Les Blocs de Construction</h4>
+        <ul>
+            <li><strong>Variable Propositionnelle :</strong> Une affirmation qui peut être soit Vraie, soit Fausse. On les note par des lettres : <code>p</code>, <code>q</code>, <code>r</code>...
+                <br><em>Exemple : <code>p</code> pourrait représenter "il pleut".</em>
+            </li>
+            <li><strong>Connecteurs Logiques :</strong> Ils permettent de combiner des propositions pour former des formules plus complexes.
+                <ul>
+                    <li><code class="logic">¬</code> (NON) : Négation</li>
+                    <li><code class="logic">∧</code> (ET) : Conjonction</li>
+                    <li><code class="logic">∨</code> (OU) : Disjonction</li>
+                    <li><code class="logic">⇒</code> (IMPLIQUE) : Implication</li>
+                    <li><code class="logic">⇔</code> (ÉQUIVAUT À) : Équivalence</li>
+                </ul>
+            </li>
+            <li><strong>Parenthèses <code>()</code> :</strong> Pour lever les ambiguïtés.</li>
+        </ul>
+
+        <h4>Grammaire Formelle (BNF)</h4>
+        <p>Une formule bien formée (fbf) est définie par les règles suivantes :</p>
+        <pre><code>Enoncé → EnoncéAtomique | EnoncéComplexe
+EnoncéAtomique → Vrai | Faux | p | q | ...
+EnoncéComplexe → (Enoncé)
+              | ¬ Enoncé
+              | Enoncé ∧ Enoncé
+              | Enoncé ∨ Enoncé
+              | Enoncé ⇒ Enoncé
+              | Enoncé ⇔ Enoncé</code></pre>
+
+        <div class="box warning">
+            <div class="box-title">⚠️ Zone de Vigilance : Priorité des Opérateurs</div>
+            Pour éviter de surcharger les formules avec des parenthèses, on utilise un ordre de priorité : <code class="logic">¬</code> est le plus prioritaire, suivi de <code class="logic">∧</code>, <code class="logic">∨</code>, et enfin <code class="logic">⇒</code> et <code class="logic">⇔</code>.
+            <br>Par exemple, <code>¬p ∧ q ⇒ r</code> est interprété comme <code>((¬p) ∧ q) ⇒ r</code>.
+            <br><strong>Conseil :</strong> En cas de doute, utilisez des parenthèses !
+        </div>
+
+        <h3 id="section2-2">2.2. Sémantique : Le Sens des Formules</h3>
+        <p>La sémantique définit comment déterminer la vérité d'une formule à partir de la vérité de ses composants.</p>
+
+        <div class="box definition">
+            <div class="box-title">Interprétation (ou Valuation)</div>
+            Une interprétation est une assignation d'une valeur de vérité (Vrai ou Faux) à chaque variable propositionnelle d'une formule. Si une formule contient <code>p</code> et <code>q</code>, une interprétation possible est <code>{p=Vrai, q=Faux}</code>.
+        </div>
+        
+        <div class="box definition">
+            <div class="box-title">Modèle</div>
+            Une interprétation est un <strong>modèle</strong> d'une formule si cette interprétation rend la formule vraie.
+        </div>
+
+        <h4>Table de Vérité des Connecteurs</h4>
+        <p>La sémantique des connecteurs est définie par leur table de vérité :</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>P</th>
+                    <th>Q</th>
+                    <th>¬P</th>
+                    <th>P ∧ Q</th>
+                    <th>P ∨ Q</th>
+                    <th>P ⇒ Q</th>
+                    <th>P ⇔ Q</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Faux</td><td>Faux</td><td>Vrai</td><td>Faux</td><td>Faux</td><td>Vrai</td><td>Vrai</td></tr>
+                <tr><td>Faux</td><td>Vrai</td><td>Vrai</td><td>Faux</td><td>Vrai</td><td>Vrai</td><td>Faux</td></tr>
+                <tr><td>Vrai</td><td>Faux</td><td>Faux</td><td>Faux</td><td>Vrai</td><td>Faux</td><td>Faux</td></tr>
+                <tr><td>Vrai</td><td>Vrai</td><td>Faux</td><td>Vrai</td><td>Vrai</td><td>Vrai</td><td>Vrai</td></tr>
+            </tbody>
+        </table>
+
+        <h4>Classification des Formules</h4>
+        <p>En fonction de leurs tables de vérité, les formules peuvent être classées en trois catégories :</p>
+        <ul>
+            <li><strong>Satisfiable :</strong> La formule est vraie pour <strong>au moins une</strong> interprétation. Elle a au moins un modèle.</li>
+            <li><strong>Valide (ou Tautologie) :</strong> La formule est vraie pour <strong>toutes</strong> les interprétations. <em>Exemple : <code>p ∨ ¬p</code>.</em></li>
+            <li><strong>Insatisfiable (ou Contradiction / Anti-tautologie) :</strong> La formule est fausse pour <strong>toutes</strong> les interprétations. Elle n'a aucun modèle. <em>Exemple : <code>p ∧ ¬p</code>.</em></li>
+        </ul>
+
+        <div class="box exercise">
+            <div class="box-title">Mini-Exercice</div>
+            Construisez la table de vérité pour la formule <code>F = (p ⇒ q) ⇔ (¬p ∨ q)</code>. Que pouvez-vous en conclure sur F ?
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    <table>
+                        <thead><tr><th>p</th><th>q</th><th>¬p</th><th>p ⇒ q</th><th>¬p ∨ q</th><th>F</th></tr></thead>
+                        <tbody>
+                            <tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td></tr>
+                            <tr><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td></tr>
+                            <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td><td>V</td></tr>
+                            <tr><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td></tr>
+                        </tbody>
+                    </table>
+                    La formule F est toujours vraie, c'est donc une <strong>tautologie</strong> (une formule valide). Cela démontre que l'implication <code>p ⇒ q</code> est logiquement équivalente à <code>¬p ∨ q</code>.
+                </div>
+            </details>
+        </div>
+
+        <h3 id="section2-3">2.3. Conséquence Logique</h3>
+        <p>La notion de conséquence logique est centrale. Elle formalise l'idée de déduction.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Conséquence Logique</div>
+            Une formule <code>φ</code> est une conséquence logique d'un ensemble de formules (les prémisses) <code>{φ1, φ2, ..., φn}</code> si et seulement si, pour toute interprétation <code>I</code> qui est un modèle de <strong>toutes</strong> les prémisses, <code>I</code> est aussi un modèle de <code>φ</code>.
+            <br>On note : <code>{φ1, φ2, ..., φn} ⊨ φ</code>.
+        </div>
+        
+        <p>En d'autres termes, si les prémisses sont vraies, alors la conclusion doit nécessairement être vraie.</p>
+        
+        <h4>Théorèmes Fondamentaux</h4>
+        <ol>
+            <li><code>{φ1, ..., φn} ⊨ φ</code> est vrai si et seulement si la formule <code>(φ1 ∧ ... ∧ φn) ⇒ φ</code> est une <strong>tautologie</strong>.</li>
+            <li><code>{φ1, ..., φn} ⊨ φ</code> est vrai si et seulement si la formule <code>(φ1 ∧ ... ∧ φn) ∧ ¬φ</code> est une <strong>contradiction</strong>.</li>
+        </ol>
+        <p>Le deuxième théorème est la base de la <strong>preuve par réfutation</strong>, une technique très puissante que nous verrons plus tard.</p>
+
+        <h3 id="section2-4">2.4. Exercices d'Application du Cours</h3>
+
+        <h4>Exercice 1 (du cours)</h4>
+        <p>En utilisant les propositions : S (le soleil brille), P (il pleut), B (il bruine), A (il y a un arc en ciel), traduisez les énoncés suivants :</p>
+        <ol>
+            <li>S'il pleut et que le soleil brille en même temps, alors il y a un arc en ciel.</li>
+            <li>La bruine est une forme de pluie.</li>
+        </ol>
+        <div class="solution">
+            <ol>
+                <li>La structure est "Si (P et S) alors A". La traduction est donc : <code>(P ∧ S) ⇒ A</code>.</li>
+                <li>Cette phrase exprime une relation d'implication. Si on observe de la bruine, alors on peut dire qu'il pleut. La traduction est : <code>B ⇒ P</code>.</li>
+            </ol>
+        </div>
+
+        <h4>Exercice 2 (du cours)</h4>
+        <p>Représentez dans le formalisme de la logique des propositions les théorèmes de géométrie suivants :</p>
+        <ol>
+            <li>Si un triangle est équilatéral alors il est isocèle.</li>
+            <li>Un carré est à la fois un parallélogramme et un rectangle.</li>
+            <li>Un losange n'est ni un rectangle ni un triangle.</li>
+            <li>Deux droites coplanaires sont soit sécantes, soit parallèles.</li>
+        </ol>
+        <div class="solution">
+            <p>Définissons d'abord les variables propositionnelles pour un objet géométrique donné :</p>
+            <ul>
+                <li><code>E</code>: est équilatéral</li>
+                <li><code>I</code>: est isocèle</li>
+                <li><code>C</code>: est un carré</li>
+                <li><code>P</code>: est un parallélogramme</li>
+                <li><code>R</code>: est un rectangle</li>
+                <li><code>L</code>: est un losange</li>
+                <li><code>T</code>: est un triangle</li>
+                <li><code>SEC</code>: sont sécantes</li>
+                <li><code>PAR</code>: sont parallèles</li>
+            </ul>
+            <p>Traductions :</p>
+            <ol>
+                <li><code>E ⇒ I</code></li>
+                <li><code>C ⇒ (P ∧ R)</code></li>
+                <li><code>L ⇒ (¬R ∧ ¬T)</code></li>
+                <li>L'expression "soit ... soit" indique un OU exclusif. Cela signifie qu'elles sont l'un ou l'autre, mais pas les deux en même temps. La traduction est : <code>(SEC ∨ PAR) ∧ ¬(SEC ∧ PAR)</code>.</li>
+            </ol>
+        </div>
+
+        <h3 id="section2-5">2.5. Équivalences et Formes Normales</h3>
+        <p>Deux formules sont équivalentes si elles ont la même table de vérité. Voici quelques équivalences standards :</p>
+        <ul>
+            <li><strong>Commutativité :</strong> <code>α ∨ β ⇔ β ∨ α</code> et <code>α ∧ β ⇔ β ∧ α</code></li>
+            <li><strong>Associativité :</strong> <code>(α ∨ β) ∨ φ ⇔ α ∨ (β ∨ φ)</code> et <code>(α ∧ β) ∧ φ ⇔ α ∧ (β ∧ φ)</code></li>
+            <li><strong>Double Négation :</strong> <code>¬(¬α) ⇔ α</code></li>
+            <li><strong>Lois de De Morgan :</strong> <code>¬(α ∧ β) ⇔ (¬α ∨ ¬β)</code> et <code>¬(α ∨ β) ⇔ (¬α ∧ ¬β)</code></li>
+            <li><strong>Distributivité :</strong> <code>α ∨ (β ∧ φ) ⇔ (α ∨ β) ∧ (α ∨ φ)</code> et <code>α ∧ (β ∨ φ) ⇔ (α ∧ β) ∨ (α ∧ φ)</code></li>
+            <li><strong>Implication :</strong> <code>α ⇒ β ⇔ ¬α ∨ β</code></li>
+            <li><strong>Équivalence :</strong> <code>α ⇔ β ⇔ (α ⇒ β) ∧ (β ⇒ α)</code></li>
+        </ul>
+        
+        <h4>Formes Normales</h4>
+        <p>Une forme normale est une manière standardisée d'écrire une formule. C'est très utile pour les algorithmes.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Forme Normale Conjonctive (FNC)</div>
+            Une formule est en FNC si elle est une <strong>conjonction de clauses</strong>, où chaque clause est une <strong>disjonction de littéraux</strong>.
+            <br>Un littéral est une variable ou sa négation (ex: <code>p</code>, <code>¬q</code>).
+            <br><em>Exemple : <code>(p ∨ ¬q) ∧ (¬p ∨ r) ∧ q</code></em>
+        </div>
+        
+        <div class="box definition">
+            <div class="box-title">Forme Normale Disjonctive (FND)</div>
+            Une formule est en FND si elle est une <strong>disjonction de monômes</strong>, où chaque monôme est une <strong>conjonction de littéraux</strong>.
+            <br><em>Exemple : <code>(p ∧ ¬q) ∨ (¬p ∧ r) ∨ q</code></em>
+        </div>
+        
+        <h4>Algorithme de Transformation en FNC</h4>
+        <ol>
+            <li><strong>Éliminer les équivalences (⇔) :</strong> Remplacer <code>A ⇔ B</code> par <code>(A ⇒ B) ∧ (B ⇒ A)</code>.</li>
+            <li><strong>Éliminer les implications (⇒) :</strong> Remplacer <code>A ⇒ B</code> par <code>¬A ∨ B</code>.</li>
+            <li><strong>Propager les négations (¬) :</strong> Utiliser les lois de De Morgan et la double négation pour que les <code>¬</code> ne portent que sur les variables.</li>
+            <li><strong>Appliquer la distributivité :</strong> Utiliser <code>A ∨ (B ∧ C) ⇔ (A ∨ B) ∧ (A ∨ C)</code> pour obtenir une conjonction de disjonctions.</li>
+        </ol>
+
+        <h2 id="part3">Partie 3 : Démonstration de Théorèmes</h2>
+        <h3 id="section3-1">3.1. Preuve par Résolution</h3>
+        <p>Les tables de vérité sont coûteuses pour prouver des théorèmes (le nombre de lignes double pour chaque nouvelle variable). La résolution est une méthode syntaxique (mécanique) beaucoup plus efficace, inventée par Robinson en 1965.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Règle de Résolution</div>
+            Étant donné deux clauses contenant des littéraux complémentaires (ex: <code>p</code> et <code>¬p</code>), on peut inférer une nouvelle clause (le résolvant) en combinant les deux clauses et en supprimant les littéraux complémentaires.
+            <br>
+            De <code>(C1: φ ∨ p)</code> et <code>(C2: ¬p ∨ ψ)</code>, on déduit <code>(C3: φ ∨ ψ)</code>.
+        </div>
+        
+        <h4>La Preuve par Réfutation</h4>
+        <p>C'est la méthode principale utilisant la résolution. Pour prouver <code>{F1, ..., Fn} ⊨ C</code> :</p>
+        <ol>
+            <li>On suppose le contraire, c'est-à-dire que les prémisses sont vraies ET que la conclusion est fausse. On ajoute donc <code>¬C</code> à notre ensemble de formules.</li>
+            <li>On convertit toutes les formules de l'ensemble <code>{F1, ..., Fn, ¬C}</code> en Forme Normale Conjonctive (FNC). On obtient une liste de clauses.</li>
+            <li>On applique la règle de résolution de manière répétée sur les clauses pour en générer de nouvelles.</li>
+            <li>Si on arrive à générer la <strong>clause vide</strong> (notée <code>□</code>, qui représente une contradiction), alors notre hypothèse initiale était fausse.</li>
+            <li>Conclusion : La conséquence logique est prouvée.</li>
+        </ol>
+        
+        <div class="box example">
+            <div class="box-title">Exemple (du cours)</div>
+            Prouvons que <code>{p ∨ q, ¬p ∨ r} ⊨ q ∨ r</code>.
+            <ol>
+                <li>On ajoute la négation de la conclusion : <code>¬(q ∨ r)</code>.</li>
+                <li>Mise sous forme de clauses :
+                    <ul>
+                        <li>C1: <code>p ∨ q</code></li>
+                        <li>C2: <code>¬p ∨ r</code></li>
+                        <li>C3: <code>¬(q ∨ r)</code> ⇔ <code>¬q ∧ ¬r</code>, ce qui donne deux clauses : <code>¬q</code> (C3) et <code>¬r</code> (C4).</li>
+                    </ul>
+                </li>
+                <li>Application de la résolution :
+                    <ul>
+                        <li>C5 (Rés(C1, C2)): <code>q ∨ r</code></li>
+                        <li>C6 (Rés(C3, C5)): <code>r</code></li>
+                        <li>C7 (Rés(C4, C6)): <code>□</code> (Clause vide)</li>
+                    </ul>
+                </li>
+            </ol>
+            <p>Puisque nous avons dérivé la clause vide, la preuve est faite.</p>
+        </div>
+        
+        <h3 id="section3-2">3.2. Les Limites de la Logique Propositionnelle</h3>
+        <p>La logique des propositions est puissante mais limitée. Elle ne peut pas modéliser des situations qui impliquent des objets, leurs propriétés, ou des relations entre eux.</p>
+        
+        <p>Considérez le raisonnement suivant :</p>
+        <pre>
+Si un homme est malade, il ne sort pas.
+Jean est un homme malade.
+--------------------------------------
+Donc, Jean ne sort pas.
+        </pre>
+        <p>Ce raisonnement est impossible à modéliser en logique des propositions. On ne peut pas exprimer "Jean", "homme", ou la relation "est un". De plus, on ne peut pas quantifier sur les objets (dire "Tous les hommes..." ou "Il existe un cours...").</p>
+        <p>Pour cela, il faut passer à une logique plus expressive : la <strong>logique des prédicats (ordre 1)</strong>, qui est l'étape suivante dans l'étude de la logique pour l'IA.</p>
+        
+        <h2 id="part4">Partie 4 : Corrigés des Travaux Dirigés</h2>
+
+        <h3 id="td1">Exercice 1</h3>
+        <h4>Énoncé</h4>
+        <p>Soit la formule F : <code>(p ⇒ (q ⇒ r)) ⇒ r ∨ ¬p</code></p>
+        <ol>
+            <li>Donnez l'arborescence de la formule F.</li>
+            <li>Donnez la table de vérité de F.</li>
+            <li>Dire si la formule F est valide, satisfiable ou insatisfiable.</li>
+            <li>La formule F a-t-elle un modèle ? Si oui lequel ?</li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Arborescence de la formule F</strong></p>
+            <pre><code>
+      ⇒
+     / \
+    /   \
+   ⇒     ∨
+  / \   / \
+ p   ⇒ r   ¬
+    / \     |
+   q   r    p
+            </code></pre>
+            <p><strong>2. Table de vérité de F</strong></p>
+            <table>
+                <thead>
+                    <tr><th>p</th><th>q</th><th>r</th><th>¬p</th><th>q ⇒ r</th><th>p ⇒ (q ⇒ r)</th><th>r ∨ ¬p</th><th><strong>F</strong></th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>V</td><td>V</td><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                    <tr><td>V</td><td>V</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td><strong>V</strong></td></tr>
+                    <tr><td>V</td><td>F</td><td>V</td><td>F</td><td>V</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                    <tr><td>V</td><td>F</td><td>F</td><td>F</td><td>V</td><td>V</td><td>F</td><td><strong>F</strong></td></tr>
+                    <tr><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                    <tr><td>F</td><td>V</td><td>F</td><td>V</td><td>F</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                    <tr><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                    <tr><td>F</td><td>F</td><td>F</td><td>V</td><td>V</td><td>V</td><td>V</td><td><strong>V</strong></td></tr>
+                </tbody>
+            </table>
+            <p><strong>3. Validité, satisfiabilité</strong></p>
+            <ul>
+                <li>La formule n'est pas valide (tautologie) car elle est fausse pour l'interprétation {p=V, q=F, r=F}.</li>
+                <li>La formule est <strong>satisfiable</strong> car elle est vraie pour au moins une interprétation (en l'occurrence, 7 d'entre elles).</li>
+            </ul>
+            <p><strong>4. Modèles</strong></p>
+            <p>Oui, F a 7 modèles. Un modèle est une interprétation qui rend F vraie. Par exemple, {p=V, q=V, r=V} est un modèle.</p>
+        </div>
+
+        <h3 id="td2">Exercice 2</h3>
+        <h4>Énoncé</h4>
+        <p>Soit la formule F suivante : <code>((b ∨ c) ⇒ a) ∨ d</code></p>
+        <ol>
+            <li>Donnez la forme normale de F.</li>
+            <li>Donnez la forme normale conjonctive (FNC) de F.</li>
+            <li>Donnez la forme normale disjonctive (FND) de F.</li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Forme normale</strong></p>
+            <pre><code>F = ((b ∨ c) ⇒ a) ∨ d
+F ≡ (¬(b ∨ c) ∨ a) ∨ d   (Élimination de ⇒)
+F ≡ ((¬b ∧ ¬c) ∨ a) ∨ d   (Loi de De Morgan)</code></pre>
+            <p>La formule <code>((¬b ∧ ¬c) ∨ a) ∨ d</code> est la forme normale, car les négations ne portent que sur les variables.</p>
+            
+            <p><strong>2. Forme normale conjonctive (FNC)</strong></p>
+            <p>On part de la forme normale et on applique la distributivité :</p>
+            <pre><code>F ≡ (a ∨ d) ∨ (¬b ∧ ¬c)             (Commutativité/Associativité)
+F ≡ ((a ∨ d) ∨ ¬b) ∧ ((a ∨ d) ∨ ¬c) (Distributivité de ∨ sur ∧)
+FNC(F) = (a ∨ d ∨ ¬b) ∧ (a ∨ d ∨ ¬c)</code></pre>
+            
+            <p><strong>3. Forme normale disjonctive (FND)</strong></p>
+            <p>La forme normale obtenue à la première étape est déjà une disjonction de termes qui sont des conjonctions de littéraux (<code>(¬b ∧ ¬c)</code>, <code>a</code>, <code>d</code>). Elle est donc déjà en FND.</p>
+            <pre><code>FND(F) = (¬b ∧ ¬c) ∨ a ∨ d</code></pre>
+        </div>
+        
+        <h3 id="td3">Exercice 3</h3>
+        <h4>Énoncé</h4>
+        <p>Donnez la forme normale conjonctive (FNC) de la formule F1 :<br>
+        <code>F1 = (p ⇒ ((q ∨ r) ∧ s)) ∧ ¬(q ⇒ (p ∨ s))</code></p>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p>Nous suivons les étapes de transformation :</p>
+            <ol>
+                <li><strong>Élimination des implications (⇒) :</strong>
+                    <pre><code>F1 ≡ (¬p ∨ ((q ∨ r) ∧ s)) ∧ ¬(¬q ∨ (p ∨ s))</code></pre>
+                </li>
+                <li><strong>Propagation des négations (¬) :</strong>
+                    <pre><code>F1 ≡ (¬p ∨ ((q ∨ r) ∧ s)) ∧ (¬¬q ∧ ¬(p ∨ s))
+F1 ≡ (¬p ∨ ((q ∨ r) ∧ s)) ∧ (q ∧ (¬p ∧ ¬s))</code></pre>
+                </li>
+                <li><strong>Application de la distributivité :</strong>
+                    <p>On applique la distributivité sur la partie gauche :</p>
+                    <pre><code>¬p ∨ ((q ∨ r) ∧ s) ≡ (¬p ∨ (q ∨ r)) ∧ (¬p ∨ s)</code></pre>
+                </li>
+                <li><strong>Assemblage final :</strong>
+                    <pre><code>F1 ≡ ((¬p ∨ q ∨ r) ∧ (¬p ∨ s)) ∧ (q ∧ ¬p ∧ ¬s)</code></pre>
+                    <p>Puisque ∧ est associatif, on peut écrire la FNC finale :</p>
+                    <pre><code>FNC(F1) = (¬p ∨ q ∨ r) ∧ (¬p ∨ s) ∧ q ∧ ¬p ∧ ¬s</code></pre>
+                </li>
+            </ol>
+        </div>
+        
+        <h3 id="td4">Exercice 4</h3>
+        <h4>Énoncé</h4>
+        <p>Soit la formule F suivante :<br>
+        <code>F = (p ∧ ¬q) ∨ (¬p ∧ ¬(q ∨ r)) ∨ (¬r ∧ q) ∨ (q ∧ r ∧ p) ∨ (r ∧ ¬p)</code></p>
+        <ol>
+            <li>Montrez que F est une tautologie. Pour ce faire, il faut montrer que ¬F est une contradiction.</li>
+            <li>En déduire ce qu'il en est de la validité de la formule B suivante :<br>
+            <code>B = (p ⇒ q) ∧ (¬p ⇒ (q ∨ r)) ∧ (¬r ⇒ ¬q) ∧ ((q ∧ r) ⇒ ¬p) ∧ (r ⇒ p)</code></li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Montrer que F est une tautologie</strong></p>
+            <p>Nous allons montrer que <code>¬F</code> est une contradiction en la transformant en FNC et en utilisant la résolution pour dériver la clause vide.</p>
+            <p>D'abord, calculons <code>¬F</code> :</p>
+            <pre><code>¬F ≡ ¬[ (p ∧ ¬q) ∨ (¬p ∧ ¬(q ∨ r)) ∨ ... ]
+¬F ≡ ¬(p ∧ ¬q) ∧ ¬(¬p ∧ ¬(q ∨ r)) ∧ ¬(¬r ∧ q) ∧ ¬(q ∧ r ∧ p) ∧ ¬(r ∧ ¬p)
+¬F ≡ (¬p ∨ q) ∧ (p ∨ (q ∨ r)) ∧ (r ∨ ¬q) ∧ (¬q ∨ ¬r ∨ ¬p) ∧ (¬r ∨ p)</code></pre>
+            <p>Nous avons les clauses suivantes :</p>
+            <ol>
+                <li><code>¬p ∨ q</code></li>
+                <li><code>p ∨ q ∨ r</code></li>
+                <li><code>r ∨ ¬q</code></li>
+                <li><code>¬q ∨ ¬r ∨ ¬p</code></li>
+                <li><code>¬r ∨ p</code></li>
+            </ol>
+            <p>Appliquons la résolution :</p>
+            <table>
+                <thead><tr><th>Étape</th><th>Clauses</th><th>Opération</th><th>Résultat</th></tr></thead>
+                <tbody>
+                    <tr><td>6</td><td>1, 2</td><td>Rés(¬p, p)</td><td><code>q ∨ r</code></td></tr>
+                    <tr><td>7</td><td>3, 6</td><td>Rés(¬q, q)</td><td><code>r ∨ r ≡ r</code></td></tr>
+                    <tr><td>8</td><td>4, 5</td><td>Rés(p, ¬p)</td><td><code>¬q ∨ ¬r</code></td></tr>
+                    <tr><td>9</td><td>7, 8</td><td>Rés(r, ¬r)</td><td><code>¬q</code></td></tr>
+                    <tr><td>10</td><td>1, 5</td><td>Rés(p, ¬p)</td><td><code>q ∨ ¬r</code></td></tr>
+                    <tr><td>11</td><td>9, 10</td><td>Rés(¬q, q)</td><td><code>¬r</code></td></tr>
+                    <tr><td>12</td><td>7, 11</td><td>Rés(r, ¬r)</td><td><strong><code>□</code> (Clause vide)</strong></td></tr>
+                </tbody>
+            </table>
+            <p>Puisque nous avons dérivé la clause vide, <code>¬F</code> est une contradiction. Par conséquent, <strong>F est une tautologie</strong>.</p>
+            
+            <p><strong>2. Validité de la formule B</strong></p>
+            <p>Mettons B sous forme normale :</p>
+            <pre><code>B ≡ (¬p ∨ q) ∧ (p ∨ q ∨ r) ∧ (r ∨ ¬q) ∧ (¬(q ∧ r) ∨ ¬p) ∧ (¬r ∨ p)
+B ≡ (¬p ∨ q) ∧ (p ∨ q ∨ r) ∧ (r ∨ ¬q) ∧ (¬q ∨ ¬r ∨ ¬p) ∧ (¬r ∨ p)</code></pre>
+            <p>Cette forme est identique à la FNC de <code>¬F</code>. Donc, <code>B ⇔ ¬F</code>.
+            Comme F est une tautologie, <code>¬F</code> est une contradiction. Par conséquent, <strong>B est une contradiction (insatisfiable)</strong>.</p>
+        </div>
+        
+        <h3 id="td5">Exercice 5</h3>
+        <h4>Énoncé</h4>
+        <p>Soient les formules : F1: <code>s ⇒ p</code>, F2: <code>w ∧ ¬z</code>, F3: <code>¬p</code>, F4: <code>¬z ⇒ s ∨ q ∨ r</code>, F5: <code>w ∨ y ⇒ ¬q</code>. Prouvez que <code>r</code> est une conséquence logique de {F1, F2, F3, F4, F5}.</p>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p>Nous utilisons la preuve par réfutation. Nous devons montrer que <code>{F1, ..., F5, ¬r}</code> est insatisfiable.</p>
+            <p><strong>1. Mise en forme clausale</strong></p>
+            <ul>
+                <li>F1: <code>s ⇒ p</code> ≡ <code>¬s ∨ p</code></li>
+                <li>F2: <code>w ∧ ¬z</code> ≡ <code>w</code> et <code>¬z</code></li>
+                <li>F3: <code>¬p</code></li>
+                <li>F4: <code>¬z ⇒ s ∨ q ∨ r</code> ≡ <code>z ∨ s ∨ q ∨ r</code></li>
+                <li>F5: <code>w ∨ y ⇒ ¬q</code> ≡ <code>¬(w ∨ y) ∨ ¬q</code> ≡ <code>(¬w ∧ ¬y) ∨ ¬q</code> ≡ <code>(¬w ∨ ¬q) ∧ (¬y ∨ ¬q)</code></li>
+                <li>Négation de la conclusion : <code>¬r</code></li>
+            </ul>
+            <p>Liste des clauses :</p>
+            <ol>
+                <li><code>¬s ∨ p</code></li>
+                <li><code>w</code></li>
+                <li><code>¬z</code></li>
+                <li><code>¬p</code></li>
+                <li><code>z ∨ s ∨ q ∨ r</code></li>
+                <li><code>¬w ∨ ¬q</code></li>
+                <li><code>¬y ∨ ¬q</code></li>
+                <li><code>¬r</code></li>
+            </ol>
+            <p><strong>2. Preuve par résolution</strong></p>
+            <table>
+                <thead><tr><th>Étape</th><th>Clauses</th><th>Opération</th><th>Résultat</th></tr></thead>
+                <tbody>
+                    <tr><td>9</td><td>1, 4</td><td>Rés(p, ¬p)</td><td><code>¬s</code></td></tr>
+                    <tr><td>10</td><td>2, 6</td><td>Rés(w, ¬w)</td><td><code>¬q</code></td></tr>
+                    <tr><td>11</td><td>3, 5</td><td>Rés(¬z, z)</td><td><code>s ∨ q ∨ r</code></td></tr>
+                    <tr><td>12</td><td>9, 11</td><td>Rés(¬s, s)</td><td><code>q ∨ r</code></td></tr>
+                    <tr><td>13</td><td>10, 12</td><td>Rés(¬q, q)</td><td><code>r</code></td></tr>
+                    <tr><td>14</td><td>8, 13</td><td>Rés(¬r, r)</td><td><strong><code>□</code> (Clause vide)</strong></td></tr>
+                </tbody>
+            </table>
+            <p>La dérivation de la clause vide prouve que l'ensemble est inconsistant. Donc, <strong>r est bien une conséquence logique</strong> de l'ensemble de formules.</p>
+        </div>
+        
+        <h3 id="td6">Exercice 6</h3>
+        <h4>Énoncé</h4>
+        <p>Soient les affirmations :<br>
+        a) Si Pierre est rentré chez lui, alors Jean est allé au cinéma.<br>
+        b) Marie est à la bibliothèque ou Pierre est rentré chez lui.<br>
+        c) Si Jean est allé au cinéma, alors Marie est à la bibliothèque ou Pierre est rentré chez lui.<br>
+        d) Marie n'est pas à la bibliothèque et Jean est allé au cinéma.<br>
+        e) Pierre est rentré chez lui.<br>
+        Montrez que <code>{A, B, C, D} ⊨ E</code>.</p>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Formalisation</strong></p>
+            <p>Variables : P (Pierre rentré), J (Jean au cinéma), M (Marie à la bibliothèque).</p>
+            <ul>
+                <li>A: <code>P ⇒ J</code></li>
+                <li>B: <code>M ∨ P</code></li>
+                <li>C: <code>J ⇒ (M ∨ P)</code></li>
+                <li>D: <code>¬M ∧ J</code></li>
+                <li>E: <code>P</code></li>
+            </ul>
+            <p><strong>2. Preuve par réfutation</strong></p>
+            <p>Nous devons montrer que <code>{A, B, C, D, ¬E}</code> est inconsistant.</p>
+            <p>Mise en forme clausale :</p>
+            <ol>
+                <li>A: <code>¬P ∨ J</code></li>
+                <li>B: <code>M ∨ P</code></li>
+                <li>C: <code>¬J ∨ M ∨ P</code></li>
+                <li>D: <code>¬M</code></li>
+                <li>D: <code>J</code></li>
+                <li>¬E: <code>¬P</code></li>
+            </ol>
+            <p>Résolution :</p>
+            <table>
+                <thead><tr><th>Étape</th><th>Clauses</th><th>Opération</th><th>Résultat</th></tr></thead>
+                <tbody>
+                    <tr><td>7</td><td>2, 4</td><td>Rés(M, ¬M)</td><td><code>P</code></td></tr>
+                    <tr><td>8</td><td>6, 7</td><td>Rés(¬P, P)</td><td><strong><code>□</code> (Clause vide)</strong></td></tr>
+                </tbody>
+            </table>
+            <p>La dérivation de la clause vide prouve que <strong>E est une conséquence logique de {A, B, C, D}</strong>.</p>
+        </div>
+    </div>
+</body>
+</html>

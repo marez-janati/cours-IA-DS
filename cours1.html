@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide de Révision : Logique des Prédicats (CP1)</title>
+    <style>
+        :root {
+            --color-primary: #4a6782;
+            --color-accent: #e67e22;
+            --color-text: #333333;
+            --color-bg: #fdfdfd;
+            --color-light-gray: #f4f4f4;
+            --color-border: #dddddd;
+            --font-body: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-code: 'Courier New', monospace;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-top: 30px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background-color: #e7e7e7;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: var(--color-light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--color-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* Callout Boxes */
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+            background-color: var(--color-light-gray);
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .box.definition { border-color: #4285F4; }
+        .box.definition .box-title { color: #4285F4; }
+        .box.example { border-color: #34A853; }
+        .box.example .box-title { color: #34A853; }
+        .box.warning { border-color: #FBBC05; background-color: #fffbeb;}
+        .box.warning .box-title { color: #FBBC05; }
+        .box.exercise { border-color: #EA4335; }
+        .box.exercise .box-title { color: #EA4335; }
+
+        /* Interactive Details for Exercises */
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: var(--color-light-gray);
+        }
+        .solution {
+            padding: 10px 15px;
+            margin-top: 5px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            text-align: center;
+        }
+        th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: var(--color-light-gray);
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Math symbols */
+        .logic {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        
+        /* Table of Contents */
+        #toc {
+            background: var(--color-light-gray);
+            border: 1px solid var(--color-border);
+            border-radius: 5px;
+            padding: 15px 25px;
+            margin-bottom: 40px;
+        }
+        #toc h3 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--color-primary);
+        }
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #toc ul li {
+            margin-bottom: 8px;
+        }
+        #toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Guide de Révision : Logique des Prédicats (CP1)</h1>
+
+        <nav id="toc">
+            <h3>Table des Matières</h3>
+            <ul>
+                <li><a href="#part1">Partie 1 : Introduction à la Logique du Premier Ordre</a></li>
+                <li><a href="#part2">Partie 2 : Syntaxe - Le Langage des Prédicats</a>
+                    <ul>
+                        <li><a href="#section2-1">2.1 Le Vocabulaire</a></li>
+                        <li><a href="#section2-2">2.2 Les Termes et les Formules Atomiques</a></li>
+                        <li><a href="#section2-3">2.3 Les Quantificateurs</a></li>
+                        <li><a href="#section2-4">2.4 Variables Libres et Liées</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part3">Partie 3 : Sémantique - Donner un Sens aux Formules</a>
+                    <ul>
+                        <li><a href="#section3-1">3.1 Interprétation et Domaine</a></li>
+                        <li><a href="#section3-2">3.2 Validité, Satisfiabilité, Conséquence</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part4">Partie 4 : Normalisation pour la Résolution</a>
+                    <ul>
+                        <li><a href="#section4-1">4.1 Étape 1 : Forme Normale Prénexe</a></li>
+                        <li><a href="#section4-2">4.2 Étape 2 : Skolémisation (Point Clé)</a></li>
+                        <li><a href="#section4-3">4.3 Étapes 3 & 4 : FNC et Forme Clausale</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part5">Partie 5 : Exercices d'Application Corrigés</a>
+                    <ul>
+                        <li><a href="#td1">Exercice 1 : Forme Prénexe</a></li>
+                        <li><a href="#td2">Exercice 2 : Forme Clausale Complète</a></li>
+                        <li><a href="#td3">Exercice 3 : Forme Clausale Directe</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <h2 id="part1">Partie 1 : Introduction à la Logique du Premier Ordre</h2>
+        <p>
+            Nous avons vu que la logique des propositions était limitée : elle ne permet pas de parler d'<strong>objets</strong>, de leurs <strong>propriétés</strong> ou des <strong>relations</strong> qui existent entre eux.
+        </p>
+        <p>
+            La <strong>Logique des Prédicats</strong>, aussi appelée Logique du Premier Ordre (CP1), vient combler ce manque. Elle nous donne les outils pour exprimer des phrases comme :
+        </p>
+        <ul>
+            <li>"<strong>Tous</strong> les étudiants sont intelligents."</li>
+            <li>"<strong>Il existe</strong> un cours qui est intéressant."</li>
+            <li>"Socrate est un homme."</li>
+        </ul>
+        <p>
+            Comme pour la logique propositionnelle, nous allons étudier sa <strong>syntaxe</strong> (comment écrire les formules), sa <strong>sémantique</strong> (comment leur donner un sens) et les méthodes de <strong>résolution</strong> (comment prouver des théorèmes).
+        </p>
+
+        <h2 id="part2">Partie 2 : Syntaxe - Le Langage des Prédicats</h2>
+        <h3 id="section2-1">2.1 Le Vocabulaire (ou Signature)</h3>
+        <p>Pour écrire des formules, nous avons besoin d'un vocabulaire de base, composé de plusieurs types de symboles :</p>
+        <ul>
+            <li><strong>Constantes :</strong> Représentent des objets spécifiques et uniques. Ex: <code>socrate</code>, <code>paris</code>, <code>cours_ia</code>.</li>
+            <li><strong>Variables :</strong> Représentent des objets non spécifiés. Ex: <code>x</code>, <code>y</code>, <code>z</code>.</li>
+            <li><strong>Fonctions :</strong> Représentent une relation qui associe un ou plusieurs objets à un unique objet. Ex: <code>mere_de(x)</code>, <code>addition(a, b)</code>.</li>
+            <li><strong>Prédicats :</strong> Représentent une propriété d'un objet ou une relation entre objets. Un prédicat renvoie Vrai ou Faux. Ex: <code>Homme(x)</code>, <code>Aime(personne1, personne2)</code>.</li>
+        </ul>
+        <div class="box definition">
+            <div class="box-title">Arité</div>
+            L'<strong>arité</strong> d'une fonction ou d'un prédicat est le nombre d'arguments qu'il prend.
+            <ul>
+                <li><code>Homme(x)</code> : prédicat d'arité 1.</li>
+                <li><code>Aime(x, y)</code> : prédicat d'arité 2.</li>
+                <li><code>mere_de(x)</code> : fonction d'arité 1.</li>
+            </ul>
+        </div>
+        
+        <h3 id="section2-2">2.2 Les Termes et les Formules Atomiques</h3>
+        <p>Avec ce vocabulaire, on construit deux types d'éléments : les termes (qui désignent des objets) et les formules (qui sont vraies ou fausses).</p>
+        
+        <div class="box definition">
+            <div class="box-title">Terme</div>
+            Un <strong>terme</strong> est une expression qui représente un objet. Un terme peut être :
+            <ol>
+                <li>Une <strong>variable</strong> (ex: <code>x</code>).</li>
+                <li>Une <strong>constante</strong> (ex: <code>socrate</code>).</li>
+                <li>Une <strong>fonction</strong> appliquée à des termes (ex: <code>mere_de(socrate)</code>).</li>
+            </ol>
+        </div>
+
+        <div class="box definition">
+            <div class="box-title">Formule Atomique (ou Atome)</div>
+            Une <strong>formule atomique</strong> est l'unité de base qui peut être Vraie ou Fausse. C'est un <strong>prédicat</strong> appliqué à des termes.
+            <br><em>Exemples : <code>Homme(socrate)</code>, <code>Aime(x, mere_de(jean))</code>.</em>
+        </div>
+        
+        <div class="box exercise">
+            <div class="box-title">Mini-Exercice</div>
+            Soit <code>f</code> une fonction d'arité 1 et <code>P</code> un prédicat d'arité 2. Les expressions suivantes sont-elles des termes, des formules atomiques ou mal formées ?
+            <ol>
+                <li><code>f(x, y)</code></li>
+                <li><code>P(a, f(b))</code> (où a, b sont des constantes)</li>
+                <li><code>f(P(a, b))</code></li>
+            </ol>
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    <ol>
+                        <li><strong>Mal formée :</strong> la fonction <code>f</code> a une arité de 1 mais on lui donne 2 arguments.</li>
+                        <li><strong>Formule atomique :</strong> le prédicat <code>P</code> est appliqué à deux termes (la constante <code>a</code> et le terme <code>f(b)</code>).</li>
+                        <li><strong>Mal formée :</strong> la fonction <code>f</code> attend un terme en argument, pas une formule (<code>P(a,b)</code>).</li>
+                    </ol>
+                </div>
+            </details>
+        </div>
+        
+        <h3 id="section2-3">2.3 Les Quantificateurs</h3>
+        <p>Les quantificateurs sont les nouveaux outils majeurs de cette logique. Ils permettent de généraliser des affirmations sur des ensembles d'objets.</p>
+        
+        <h4>Quantificateur Universel (<code class="logic">∀</code>)</h4>
+        <p>Signifie "Pour tous" ou "Quel que soit". Il affirme qu'une propriété est vraie pour tous les objets du domaine.</p>
+        <div class="box example">
+            <div class="box-title">Exemple</div>
+            "Toute personne à la FST est intelligente" se traduit par :
+            <br><code>∀x (Personne_FST(x) ⇒ Intelligent(x))</code>
+            <br><em>Lecture : "Pour tout x, si x est une personne à la FST, alors x est intelligent."</em>
+        </div>
+        
+        <h4>Quantificateur Existentiel (<code class="logic">∃</code>)</h4>
+        <p>Signifie "Il existe au moins un". Il affirme qu'il y a au moins un objet dans le domaine qui possède une certaine propriété.</p>
+        <div class="box example">
+            <div class="box-title">Exemple</div>
+            "Il y a quelqu'un d'intelligent à la FST" se traduit par :
+            <br><code>∃x (Personne_FST(x) ∧ Intelligent(x))</code>
+            <br><em>Lecture : "Il existe un x tel que x est une personne à la FST et x est intelligent."</em>
+        </div>
+        
+        <div class="box warning">
+            <div class="box-title">⚠️ Zone de Vigilance : Connecteur typique</div>
+            Notez bien la structure typique :
+            <ul>
+                <li>Le quantificateur universel <code class="logic">∀</code> est le plus souvent utilisé avec l'<strong>implication</strong> <code class="logic">⇒</code>.</li>
+                <li>Le quantificateur existentiel <code class="logic">∃</code> est le plus souvent utilisé avec la <strong>conjonction</strong> <code class="logic">∧</code>.</li>
+            </ul>
+        </div>
+        
+        <h3 id="section2-4">2.4 Variables Libres et Liées</h3>
+        <p>La portée d'un quantificateur est la formule sur laquelle il s'applique. Ce concept est crucial pour comprendre la différence entre variables libres et liées.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Variables Liées et Libres</div>
+            <ul>
+                <li>Une variable est <strong>liée</strong> si elle est dans la portée d'un quantificateur qui la nomme (ex: le <code>x</code> dans <code>∀x P(x)</code>).</li>
+                <li>Une variable est <strong>libre</strong> si elle n'est pas liée. Elle agit comme un paramètre dont la valeur doit être définie par le contexte.</li>
+            </ul>
+        </div>
+        
+        <div class="box example">
+            <div class="box-title">Exemple</div>
+            Dans la formule <code>∀x (P(x) ∧ Q(y, x))</code> :
+            <ul>
+                <li>Toutes les occurrences de <code>x</code> sont <strong>liées</strong> par le <code>∀x</code>.</li>
+                <li>La variable <code>y</code> est <strong>libre</strong>.</li>
+            </ul>
+        </div>
+        
+        <div class="box definition">
+            <div class="box-title">Formule Fermée</div>
+            Une formule est dite <strong>fermée</strong> si elle ne contient aucune variable libre. Les formules fermées sont les seules qui ont une valeur de vérité propre.
+        </div>
+        
+        <h2 id="part3">Partie 3 : Sémantique - Donner un Sens aux Formules</h2>
+        <h3 id="section3-1">3.1 Interprétation et Domaine</h3>
+        <p>En logique propositionnelle, une interprétation consistait à assigner Vrai/Faux aux variables. Ici, c'est plus complexe. Une interprétation doit définir le "monde" dans lequel on évalue la formule.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Interprétation (I)</div>
+            Une interprétation <code>I</code> est la donnée de :
+            <ol>
+                <li>Un <strong>domaine (D)</strong> non vide : l'ensemble de tous les objets qui existent dans notre monde. Ex: D = {socrate, platon, aristote}.</li>
+                <li>Une fonction qui associe :
+                    <ul>
+                        <li>à chaque <strong>constante</strong>, un objet de D. Ex: <code>I(socrate) = socrate</code>.</li>
+                        <li>à chaque <strong>symbole de fonction</strong>, une vraie fonction sur D.</li>
+                        <li>à chaque <strong>symbole de prédicat</strong>, une vraie relation sur D (qui renvoie Vrai ou Faux). Ex: <code>I(Homme) = {(socrate, Vrai), (platon, Vrai), (aristote, Vrai)}</code>.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+        
+        <h3 id="section3-2">3.2 Validité, Satisfiabilité, Conséquence</h3>
+        <p>Ces notions sont analogues à celles de la logique propositionnelle, mais appliquées aux interprétations de la logique des prédicats.</p>
+        <ul>
+            <li><strong>Satisfiable :</strong> Il existe <strong>au moins une</strong> interprétation (un domaine D et des assignations) qui rend la formule Vraie. Cette interprétation est un <strong>modèle</strong> de la formule.</li>
+            <li><strong>Insatisfiable (Contradiction) :</strong> La formule est Fausse pour <strong>toutes</strong> les interprétations possibles.</li>
+            <li><strong>Valide (Tautologie) :</strong> La formule est Vraie pour <strong>toutes</strong> les interprétations possibles.</li>
+            <li><strong>Conséquence Logique (<code>A ⊨ B</code>) :</strong> Pour toute interprétation qui est un modèle de A, elle est aussi un modèle de B.</li>
+        </ul>
+        
+        <h2 id="part4">Partie 4 : Normalisation pour la Résolution</h2>
+        <p>
+            Comme en logique propositionnelle, la méthode de résolution est la plus efficace pour les preuves automatiques. Elle exige de transformer les formules en un format standard : la <strong>forme clausale</strong>. Ce processus se fait en 4 grandes étapes.
+        </p>
+
+        <h3 id="section4-1">4.1 Étape 1 : Forme Normale Prénexe (FNP)</h3>
+        <p>Une formule est en FNP si tous les quantificateurs sont regroupés au début de la formule.</p>
+        
+        <h4>Algorithme de construction de la FNP</h4>
+        <ol>
+            <li><strong>Éliminer <code>⇔</code> et <code>⇒</code></strong> avec les équivalences connues.</li>
+            <li><strong>Propager les négations</strong> jusqu'aux atomes en utilisant les lois de De Morgan et les équivalences des quantificateurs : <code>¬∀x A(x) ⇔ ∃x ¬A(x)</code> et <code>¬∃x A(x) ⇔ ∀x ¬A(x)</code>.</li>
+            <li><strong>Renommer les variables</strong> pour que chaque quantificateur ait sa propre variable unique. C'est crucial pour éviter les conflits de portée.</li>
+            <li><strong>Déplacer tous les quantificateurs</strong> au début de la formule.</li>
+        </ol>
+        
+        <div class="box warning">
+            <div class="box-title">⚠️ Zone de Vigilance : Renommage</div>
+            Oublier de renommer les variables est une erreur très fréquente. Avant de déplacer les quantificateurs, assurez-vous qu'une même variable (ex: 'x') n'est pas utilisée par deux quantificateurs différents.
+            <br>Ex: <code>∀x P(x) ∧ ∃x Q(x)</code> doit devenir <code>∀x P(x) ∧ ∃y Q(y)</code> avant de déplacer les quantificateurs.
+        </div>
+        
+        <h3 id="section4-2">4.2 Étape 2 : Skolémisation (Point Clé)</h3>
+        <p>La skolémisation est un procédé pour éliminer les quantificateurs existentiels (<code>∃</code>). L'idée est de remplacer la variable existentielle par un terme qui la "matérialise".</p>
+        
+        <div class="box warning">
+            <div class="box-title">⚠️ Important : Préservation de la Satisfiabilité</div>
+            La skolémisation ne produit pas une formule logiquement équivalente ! Elle produit une formule qui est <strong>satisfiable si et seulement si</strong> la formule originale l'était. C'est suffisant pour la preuve par réfutation (qui ne cherche qu'à prouver l'insatisfiabilité).
+        </div>
+        
+        <h4>Les deux règles de la Skolémisation</h4>
+        <p>On parcourt la formule prénexe de gauche à droite. Dès qu'on rencontre un <code>∃</code> :</p>
+        
+        <p><strong>Règle 1 : Le <code>∃</code> n'est précédé d'aucun <code>∀</code>.</strong></p>
+        <p>On supprime le quantificateur <code>∃x</code> et on remplace toutes les occurrences de <code>x</code> par une <strong>nouvelle constante de Skolem</strong> (une constante qui n'apparaît nulle part ailleurs).</p>
+        <div class="box example">
+            <div class="box-title">Exemple (Constante de Skolem)</div>
+            <code>∃x President(x)</code>
+            <br><em>"Il existe un président."</em>
+            <br>On introduit une constante <code>c_president</code>.
+            <br>Forme skolenisée : <code>President(c_president)</code>
+        </div>
+        
+        <p><strong>Règle 2 : Le <code>∃</code> est précédé par des quantificateurs universels <code>∀</code>.</strong></p>
+        <p>L'objet qui existe dépend des objets introduits par les <code>∀</code>. On supprime <code>∃y</code> et on remplace toutes les occurrences de <code>y</code> par une <strong>nouvelle fonction de Skolem</strong> dont les arguments sont <strong>toutes les variables des <code>∀</code></strong> qui le précèdent.</p>
+        <div class="box example">
+            <div class="box-title">Exemple (Fonction de Skolem)</div>
+            <code>∀x Personne(x) ⇒ ∃y Coeur(y) ∧ Possede(x, y)</code>
+            <br><em>"Toute personne possède un coeur."</em>
+            <br>Le coeur <code>y</code> qui existe dépend de la personne <code>x</code>.
+            <br>Le <code>∃y</code> est précédé par <code>∀x</code>. On introduit une fonction <code>f_coeur(x)</code>.
+            <br>Forme skolenisée : <code>∀x Personne(x) ⇒ (Coeur(f_coeur(x)) ∧ Possede(x, f_coeur(x)))</code>
+        </div>
+        
+        <div class="box exercise">
+            <div class="box-title">Mini-Exercice de Skolémisation</div>
+            Donnez la forme de Skolem de la formule prénexe suivante :
+            <br><code>∃a ∀b ∀c ∃d ∀e ∃f P(a, b, c, d, e, f)</code>
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    <ol>
+                        <li><code>∃a</code> n'est précédé d'aucun <code>∀</code>. On le remplace par une constante <code>c_a</code>.
+                            <br>Formule : <code>∀b ∀c ∃d ∀e ∃f P(c_a, b, c, d, e, f)</code></li>
+                        <li><code>∃d</code> est précédé par <code>∀b</code> et <code>∀c</code>. On le remplace par une fonction <code>f_d(b, c)</code>.
+                            <br>Formule : <code>∀b ∀c ∀e ∃f P(c_a, b, c, f_d(b, c), e, f)</code></li>
+                        <li><code>∃f</code> est précédé par <code>∀b</code>, <code>∀c</code> et <code>∀e</code>. On le remplace par une fonction <code>f_f(b, c, e)</code>.
+                            <br>Formule : <code>∀b ∀c ∀e P(c_a, b, c, f_d(b, c), e, f_f(b, c, e))</code></li>
+                    </ol>
+                    <strong>Forme finale : <code>∀b ∀c ∀e P(c_a, b, c, f_d(b, c), e, f_f(b, c, e))</code></strong>
+                </div>
+            </details>
+        </div>
+        
+        <h3 id="section4-3">4.3 Étapes 3 & 4 : FNC et Forme Clausale</h3>
+        <p>Une fois la formule skolemizée, il ne reste que des quantificateurs universels.</p>
+        <ol>
+            <li><strong>Mettre en FNC :</strong> On applique la distributivité (<code>A ∨ (B ∧ C) ⇔ (A ∨ B) ∧ (A ∨ C)</code>) sur la partie sans quantificateurs (la matrice) pour obtenir une conjonction de disjonctions.</li>
+            <li><strong>Obtenir la Forme Clausale :</strong>
+                <ul>
+                    <li>On supprime tous les quantificateurs universels (ils sont désormais implicites).</li>
+                    <li>On transforme la grande conjonction en un ensemble de clauses, où chaque clause est un des termes de la conjonction.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>Cet ensemble de clauses est maintenant prêt pour la méthode de résolution.</p>
+
+        <h2 id="part5">Partie 5 : Exercices d'Application Corrigés</h2>
+        
+        <h3 id="td1">Exercice 1 : Forme Prénexe</h3>
+        <h4>Énoncé</h4>
+        <p>Mettre sous forme prénexe les formules suivantes :</p>
+        <ol>
+            <li><code>∀x ( (∃y R(x, y) ∧ ∀y ¬S(x, y)) ⇒ ¬(∃y R(x, y) ∧ P) )</code></li>
+            <li><code>¬[ ∀x ∃y F(u, x, y) ⇒ ∃x(¬∀y G(y, v) ⇒ H(x)) ]</code></li>
+            <li><code>∃z ( (∃x Q(x, z) ∨ ∃x P(x)) ⇒ ¬(¬∃x P(x) ∧ ∀x ∃z Q(z, x)) )</code></li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Formule 1</strong></p>
+            <pre><code><strong>Formule initiale :</strong> ∀x ( (∃y R(x, y) ∧ ∀y ¬S(x, y)) ⇒ ¬(∃y R(x, y) ∧ P) )
+<strong>1. Éliminer ⇒ :</strong> ∀x ( ¬(∃y R(x, y) ∧ ∀y ¬S(x, y)) ∨ ¬(∃y R(x, y) ∧ P) )
+<strong>2. Propager ¬ :</strong> ∀x ( (∀y ¬R(x, y) ∨ ∃y S(x, y)) ∨ (∀y ¬R(x, y) ∨ ¬P) )
+<strong>3. Renommer variables :</strong> ∀x ( (∀y1 ¬R(x, y1) ∨ ∃y2 S(x, y2)) ∨ (∀y3 ¬R(x, y3) ∨ ¬P) )
+<strong>4. Déplacer quantificateurs :</strong> ∀x ∀y1 ∃y2 ∀y3 ( ¬R(x, y1) ∨ S(x, y2) ∨ ¬R(x, y3) ∨ ¬P )
+</code></pre>
+            <p><strong>2. Formule 2</strong></p>
+            <pre><code><strong>Formule initiale :</strong> ¬[ ∀x ∃y F(u, x, y) ⇒ ∃x(¬∀y G(y, v) ⇒ H(x)) ]
+<strong>1. Propager ¬ sur ⇒ (¬(A⇒B)⇔A∧¬B) :</strong> (∀x ∃y F(u, x, y)) ∧ ¬(∃x(¬∀y G(y, v) ⇒ H(x)))
+<strong>2. Éliminer ⇒ et propager ¬ :</strong> (∀x ∃y F(u, x, y)) ∧ (∀x ¬(¬¬∀y G(y, v) ∨ H(x)))
+<strong>3. Simplifier et propager ¬ :</strong> (∀x ∃y F(u, x, y)) ∧ (∀x (¬∀y G(y, v) ∧ ¬H(x)))
+<strong>4. Propager ¬ sur quantificateur :</strong> (∀x ∃y F(u, x, y)) ∧ (∀x (∃y ¬G(y, v) ∧ ¬H(x)))
+<strong>5. Renommer variables :</strong> (∀x ∃y F(u, x, y)) ∧ (∀x1 (∃y1 ¬G(y1, v) ∧ ¬H(x1)))
+<strong>6. Déplacer quantificateurs :</strong> ∀x ∃y ∀x1 ∃y1 ( F(u, x, y) ∧ ¬G(y1, v) ∧ ¬H(x1) )
+</code></pre>
+            <p><strong>3. Formule 3</strong></p>
+            <pre><code><strong>Formule initiale :</strong> ∃z ( (∃x Q(x, z) ∨ ∃x P(x)) ⇒ ¬(¬∃x P(x) ∧ ∀x ∃z Q(z, x)) )
+<strong>1. Éliminer ⇒ :</strong> ∃z ( ¬(∃x Q(x, z) ∨ ∃x P(x)) ∨ ¬(¬∃x P(x) ∧ ∀x ∃z Q(z, x)) )
+<strong>2. Propager ¬ :</strong> ∃z ( (∀x ¬Q(x, z) ∧ ∀x ¬P(x)) ∨ (∃x P(x) ∨ ∃x ∀z ¬Q(z, x)) )
+<strong>3. Renommer variables :</strong> ∃z1 ( (∀x1 ¬Q(x1, z1) ∧ ∀x2 ¬P(x2)) ∨ (∃x3 P(x3) ∨ ∃x4 ∀z2 ¬Q(z2, x4)) )
+<strong>4. Déplacer quantificateurs :</strong> ∃z1 ∀x1 ∀x2 ∃x3 ∃x4 ∀z2 ( (¬Q(x1, z1) ∧ ¬P(x2)) ∨ P(x3) ∨ ¬Q(z2, x4) )
+</code></pre>
+        </div>
+
+        <h3 id="td2">Exercice 2 : Forme Clausale Complète</h3>
+        <h4>Énoncé</h4>
+        <p>Considérons la formule : <code>∀x ∀y ∀z ( (∀x r(x, x)) ∧ ( (∀x r(x, y)) ⇒ (∃y r(y, x) ∧ ∀y r(y, z)) ) )</code></p>
+        <ol>
+            <li>Donnez la forme prénexe.</li>
+            <li>Donnez la forme de Skolem.</li>
+            <li>Mettre sous forme normale conjonctive.</li>
+            <li>Donnez l'ensemble de clauses.</li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Forme Prénexe</strong></p>
+            <pre><code><strong>1. Renommer variables :</strong> ∀x ∀y ∀z ( (∀x1 r(x1, x1)) ∧ ( (∀x2 r(x2, y)) ⇒ (∃y1 r(y1, x) ∧ ∀y2 r(y2, z)) ) )
+<strong>2. Éliminer ⇒ et propager ¬ :</strong> ∀x ∀y ∀z ( (∀x1 r(x1, x1)) ∧ ( ∃x2 ¬r(x2, y) ∨ (∃y1 r(y1, x) ∧ ∀y2 r(y2, z)) ) )
+<strong>3. Déplacer quantificateurs :</strong> ∀x ∀y ∀z ∀x1 ∃x2 ∃y1 ∀y2 ( r(x1, x1) ∧ ( ¬r(x2, y) ∨ (r(y1, x) ∧ r(y2, z)) ) )</code></pre>
+
+            <p><strong>2. Forme de Skolem</strong></p>
+            <p>On analyse les quantificateurs existentiels de la FNP :</p>
+            <ul>
+                <li><code>∃x2</code> est sous la portée de <code>∀x, ∀y, ∀z, ∀x1</code>. On remplace <code>x2</code> par <code>f(x, y, z, x1)</code>.</li>
+                <li><code>∃y1</code> est aussi sous la portée de <code>∀x, ∀y, ∀z, ∀x1</code>. On remplace <code>y1</code> par <code>g(x, y, z, x1)</code>.</li>
+            </ul>
+            <pre><code><strong>Forme de Skolem :</strong> ∀x ∀y ∀z ∀x1 ∀y2 ( r(x1, x1) ∧ (¬r(f(x, y, z, x1), y) ∨ (r(g(x, y, z, x1), x) ∧ r(y2, z))) )</code></pre>
+
+            <p><strong>3. Forme Normale Conjonctive (FNC)</strong></p>
+            <p>On applique la distributivité sur la matrice : <code>A ∧ (B ∨ (C ∧ D)) ⇔ A ∧ (B ∨ C) ∧ (B ∨ D)</code>.</p>
+            <pre><code>r(x1, x1) ∧ (¬r(f(x, y, z, x1), y) ∨ r(g(x, y, z, x1), x)) ∧ (¬r(f(x, y, z, x1), y) ∨ r(y2, z))</code></pre>
+
+            <p><strong>4. Ensemble de Clauses</strong></p>
+            <p>On supprime les <code>∀</code> et on sépare les conjonctions.</p>
+            <ol>
+                <li><code>r(x1, x1)</code></li>
+                <li><code>¬r(f(x, y, z, x1), y) ∨ r(g(x, y, z, x1), x)</code></li>
+                <li><code>¬r(f(x, y, z, x1), y) ∨ r(y2, z)</code></li>
+            </ol>
+        </div>
+        
+        <h3 id="td3">Exercice 3 : Forme Clausale Directe</h3>
+        <h4>Énoncé</h4>
+        <p>Donner la forme clausale des formules suivantes :</p>
+        <ol>
+            <li><code>∀x ∀y ( (r(x, y) ∧ ¬egal(x, y)) ⇒ ∃z (egal(y, g(x, h(z, z)))) )</code></li>
+            <li><code>(∀x ¬r(x, x)) ∧ (∃x ∀y (r(x, y) ⇒ ¬∃z r(z, x))) ∧ (∀x ∀y (r(x, y) ⇒ ∃z (r(x, z) ∧ r(z, x))))</code></li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Formule 1</strong></p>
+            <pre><code><strong>Formule initiale :</strong> ∀x ∀y ( (r(x, y) ∧ ¬egal(x, y)) ⇒ ∃z (egal(y, g(x, h(z, z)))) )
+<strong>1. Éliminer ⇒ :</strong> ∀x ∀y ( ¬(r(x, y) ∧ ¬egal(x, y)) ∨ ∃z (...) )
+<strong>2. Propager ¬ :</strong> ∀x ∀y ( ¬r(x, y) ∨ egal(x, y) ∨ ∃z (...) )
+<strong>3. FNP :</strong> ∀x ∀y ∃z ( ¬r(x, y) ∨ egal(x, y) ∨ egal(y, g(x, h(z, z))) )
+<strong>4. Skolémisation :</strong> ∃z dépend de ∀x, ∀y. On remplace z par f(x, y).
+   ∀x ∀y ( ¬r(x, y) ∨ egal(x, y) ∨ egal(y, g(x, h(f(x, y), f(x, y)))) )
+<strong>5. Forme Clausale :</strong> ¬r(x, y) ∨ egal(x, y) ∨ egal(y, g(x, h(f(x, y), f(x, y))))
+</code></pre>
+            
+            <p><strong>2. Formule 2</strong></p>
+            <p>On traite chaque partie de la conjonction séparément.</p>
+            <ul>
+                <li><strong>Partie A : <code>∀x ¬r(x, x)</code></strong>
+                    <br>Déjà en forme clausale : <strong><code>¬r(x, x)</code></strong>
+                </li>
+                <li><strong>Partie B : <code>∃x ∀y (r(x, y) ⇒ ¬∃z r(z, x))</code></strong>
+                    <br>FNP : <code>∃x ∀y ∀z (¬r(x, y) ∨ ¬r(z, x))</code>
+                    <br>Skolémisation (<code>∃x</code> est premier) : <code>∀y ∀z (¬r(c, y) ∨ ¬r(z, c))</code>
+                    <br>Clause : <strong><code>¬r(c, y) ∨ ¬r(z, c)</code></strong>
+                </li>
+                <li><strong>Partie C : <code>∀x ∀y (r(x, y) ⇒ ∃z (r(x, z) ∧ r(z, x)))</code></strong>
+                    <br>FNP : <code>∀x ∀y ∃z (¬r(x, y) ∨ (r(x, z) ∧ r(z, x)))</code>
+                    <br>Skolémisation (<code>∃z</code> dépend de <code>∀x, ∀y</code>) : <code>∀x ∀y (¬r(x, y) ∨ (r(x, f(x, y)) ∧ r(f(x, y), x)))</code>
+                    <br>FNC (Distributivité) : <code>∀x ∀y ( (¬r(x, y) ∨ r(x, f(x, y))) ∧ (¬r(x, y) ∨ r(f(x, y), x)) )</code>
+                    <br>Clauses : <strong><code>¬r(x, y) ∨ r(x, f(x, y))</code></strong> et <strong><code>¬r(x, y) ∨ r(f(x, y), x)</code></strong>
+                </li>
+            </ul>
+            <p><strong>Ensemble final de clauses :</strong></p>
+            <ol>
+                <li><code>¬r(x, x)</code></li>
+                <li><code>¬r(c, y) ∨ ¬r(z, c)</code></li>
+                <li><code>¬r(x, y) ∨ r(x, f(x, y))</code></li>
+                <li><code>¬r(x, y) ∨ r(f(x, y), x)</code></li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

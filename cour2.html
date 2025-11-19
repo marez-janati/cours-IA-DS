@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide de Révision Final : Résolution et Unification en Logique des Prédicats</title>
+    <style>
+        :root {
+            --color-primary: #4a6782;
+            --color-accent: #e67e22;
+            --color-text: #333333;
+            --color-bg: #fdfdfd;
+            --color-light-gray: #f4f4f4;
+            --color-border: #dddddd;
+            --font-body: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-code: 'Courier New', monospace;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-top: 30px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background-color: #e7e7e7;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: var(--color-light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--color-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        /* Callout Boxes */
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+            background-color: var(--color-light-gray);
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .box.definition { border-color: #4285F4; }
+        .box.definition .box-title { color: #4285F4; }
+        .box.example { border-color: #34A853; }
+        .box.example .box-title { color: #34A853; }
+        .box.warning { border-color: #FBBC05; background-color: #fffbeb;}
+        .box.warning .box-title { color: #FBBC05; }
+        .box.exercise { border-color: #EA4335; }
+        .box.exercise .box-title { color: #EA4335; }
+
+        /* Interactive Details for Exercises */
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: var(--color-light-gray);
+        }
+        .solution {
+            padding: 10px 15px;
+            margin-top: 5px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: var(--color-light-gray);
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+        .logic {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        
+        /* Table of Contents */
+        #toc {
+            background: var(--color-light-gray);
+            border: 1px solid var(--color-border);
+            border-radius: 5px;
+            padding: 15px 25px;
+            margin-bottom: 40px;
+        }
+        #toc h3 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--color-primary);
+        }
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #toc ul li {
+            margin-bottom: 8px;
+        }
+        #toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Guide de Révision Final : Résolution et Unification</h1>
+
+        <nav id="toc">
+            <h3>Table des Matières</h3>
+            <ul>
+                <li><a href="#part1">Partie 1 : La Résolution en Logique des Prédicats</a></li>
+                <li><a href="#part2">Partie 2 : La Substitution</a></li>
+                <li><a href="#part3">Partie 3 : L'Unification</a>
+                    <ul>
+                        <li><a href="#section3-1">3.1 Unificateur et PGU</a></li>
+                        <li><a href="#section3-2">3.2 L'Algorithme d'Unification</a></li>
+                        <li><a href="#section3-3">3.3 Exemples d'Application de l'Algorithme</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part4">Partie 4 : Le Principe de Résolution avec Unification</a>
+                    <ul>
+                        <li><a href="#section4-1">4.1 La Règle du Résolvant Binaire</a></li>
+                        <li><a href="#section4-2">4.2 La Preuve Complète par Réfutation</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part5">Partie 5 : Exercices d'Application Corrigés</a>
+                    <ul>
+                        <li><a href="#ex1">Exercice 1 : Unification (PGU)</a></li>
+                        <li><a href="#ex2">Exercice 2 : Preuve par Résolution</a></li>
+                        <li><a href="#ex3">Exercice 3 : Preuve par Résolution</a></li>
+                        <li><a href="#ex4">Exercice 4 : Unification (Cas d'échec)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <h2 id="part1">Partie 1 : La Résolution en Logique des Prédicats</h2>
+        <p>En logique propositionnelle, la résolution était simple : on cherchait des littéraux exactement opposés comme <code>p</code> et <code>¬p</code>. En logique des prédicats, la situation est plus complexe. Les littéraux <code>P(x)</code> et <code>¬P(a)</code> sont-ils opposés ?</p>
+        <p>Ils ne le sont pas directement, mais ils peuvent le devenir. Si on remplace la variable <code>x</code> par la constante <code>a</code>, ils deviennent <code>P(a)</code> et <code>¬P(a)</code>. Ce processus, qui consiste à rendre deux expressions identiques en remplaçant des variables par des termes, s'appelle l'<strong>unification</strong>. C'est le moteur de la résolution en logique du premier ordre.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Unification</div>
+            Deux formules atomiques sont <strong>unifiables</strong> s'il existe une <strong>substitution</strong> de leurs variables par des termes qui rend les deux formules identiques.
+        </div>
+        
+        <h2 id="part2">Partie 2 : La Substitution</h2>
+        <div class="box definition">
+            <div class="box-title">Substitution (σ)</div>
+            Une substitution est un ensemble fini de paires <code>{variable / terme}</code>, où chaque variable est unique et différente du terme qui la remplace.
+            <br>Exemple : <code>σ = {x / a, y / f(b), z / w}</code>
+        </div>
+        
+        <p>Appliquer une substitution <code>σ</code> à une expression <code>E</code>, noté <code>Eσ</code>, consiste à remplacer simultanément chaque occurrence des variables de <code>σ</code> dans <code>E</code> par le terme correspondant.</p>
+        
+        <div class="box example">
+            <div class="box-title">Exemple d'Application</div>
+            Soit <code>E = P(x, y, g(z))</code> et <code>σ = {x / a, y / f(b)}</code>.
+            <br>Alors <code>Eσ = P(a, f(b), g(z))</code>.
+        </div>
+
+        <h2 id="part3">Partie 3 : L'Unification</h2>
+        <h3 id="section3-1">3.1 Unificateur et PGU</h3>
+        <p>Plusieurs substitutions peuvent unifier deux expressions, mais l'une d'entre elles est plus "générale" que les autres.</p>
+        
+        <div class="box definition">
+            <div class="box-title">Unificateur et PGU</div>
+            <ul>
+                <li>Un <strong>unificateur</strong> de deux expressions est une substitution qui les rend identiques.</li>
+                <li>L'<strong>Unificateur le Plus Général (PGU)</strong> est un unificateur tel que tout autre unificateur peut être obtenu en composant le PGU avec une autre substitution. C'est la substitution la moins contraignante possible.</li>
+            </ul>
+        </div>
+        
+        <div class="box example">
+            <div class="box-title">Exemple : PGU</div>
+            Soit à unifier <code>A = f(x, b)</code> et <code>B = f(g(y), z)</code>.
+            <ul>
+                <li><code>σ1 = {x / g(y), z / b}</code> est un unificateur. Aσ1 = Bσ1 = <code>f(g(y), b)</code>.</li>
+                <li><code>σ2 = {x / g(a), y / a, z / b}</code> est aussi un unificateur. Aσ2 = Bσ2 = <code>f(g(a), b)</code>.</li>
+            </ul>
+            <code>σ1</code> est le <strong>PGU</strong> car <code>σ2</code> peut être obtenu en composant <code>σ1</code> avec <code>{y/a}</code>. <code>σ1</code> laisse la variable <code>y</code> libre, ce qui est plus général.
+        </div>
+
+        <h3 id="section3-2">3.2 L'Algorithme d'Unification</h3>
+        <p>L'algorithme de Robinson permet de trouver le PGU de deux expressions de manière systématique. Il fonctionne en identifiant les "ensembles de désaccord" et en les résolvant un par un.</p>
+        
+        <h4>Déroulement de l'algorithme :</h4>
+        <ol>
+            <li>Initialiser la substitution PGU <code>σ</code> à vide.</li>
+            <li>Comparer les deux expressions (après application de <code>σ</code>) de gauche à droite jusqu'à trouver la première différence. Cet ensemble de sous-expressions différentes est l'<strong>ensemble de désaccord</strong>.</li>
+            <li>Si les expressions sont identiques, l'algorithme s'arrête et retourne <code>σ</code>.</li>
+            <li>Analyser l'ensemble de désaccord <code>{t1, t2}</code> :
+                <ul>
+                    <li>Si ni <code>t1</code> ni <code>t2</code> n'est une variable, et que leurs symboles racines sont différents (ex: <code>f(a)</code> vs <code>g(a)</code>), c'est un <strong>échec (clash)</strong>. Les expressions ne sont pas unifiables.</li>
+                    <li>Si l'un des termes, disons <code>t1</code>, est une variable <code>x</code>, et que cette variable <code>x</code> apparaît dans l'autre terme <code>t2</code> (ex: <code>x</code> vs <code>f(x)</code>), c'est un <strong>échec (occur check)</strong>.</li>
+                    <li>Si l'un des termes est une variable <code>x</code> qui ne viole pas l'occur check, on crée une nouvelle substitution <code>{x / t2}</code>. On compose <code>σ</code> avec cette nouvelle substitution (<code>σ := σ ο {x / t2}</code>) et on retourne à l'étape 2.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3 id="section3-3">3.3 Exemples d'Application de l'Algorithme</h3>
+        <p>Le meilleur moyen de comprendre est de dérouler l'algorithme avec le format tableau.</p>
+        
+        <h4>Exemple 1 : Succès</h4>
+        <p>Unifions <code>A = P(x, f(x), a)</code> et <code>B = P(y, z, u)</code>.</p>
+        <table>
+            <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+            <tbody>
+                <tr><td>P(x, f(x), a)</td><td>P(y, z, u)</td><td><code>{x, y}</code></td><td><code>{}</code></td></tr>
+                <tr><td>P(y, f(y), a)</td><td>P(y, z, u)</td><td><code>{f(y), z}</code></td><td><code>{x / y}</code></td></tr>
+                <tr><td>P(y, f(y), a)</td><td>P(y, f(y), u)</td><td><code>{a, u}</code></td><td><code>{x / y, z / f(y)}</code></td></tr>
+                <tr><td>P(y, f(y), a)</td><td>P(y, f(y), a)</td><td><code>{}</code></td><td><strong><code>{x / y, z / f(y), u / a}</code></strong></td></tr>
+            </tbody>
+        </table>
+        
+        <h4>Exemple 2 : Échec (Clash)</h4>
+        <p>Unifions <code>A = P(x, f(g(x)), a)</code> et <code>B = P(b, y, y)</code>.</p>
+        <table>
+            <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+            <tbody>
+                <tr><td>P(x, f(g(x)), a)</td><td>P(b, y, y)</td><td><code>{x, b}</code></td><td><code>{}</code></td></tr>
+                <tr><td>P(b, f(g(b)), a)</td><td>P(b, y, y)</td><td><code>{f(g(b)), y}</code></td><td><code>{x / b}</code></td></tr>
+                <tr><td>P(b, f(g(b)), a)</td><td>P(b, f(g(b)), f(g(b)))</td><td><code>{a, f(g(b))}</code></td><td><code>{x / b, y / f(g(b))}</code></td></tr>
+                <tr><td colspan="4" style="text-align:center; color:red; font-weight:bold;">ÉCHEC (Clash) : 'a' est une constante, 'f' est une fonction. Leurs symboles racines sont différents.</td></tr>
+            </tbody>
+        </table>
+
+        <h4>Exemple 3 : Échec (Occur Check)</h4>
+        <p>Unifions <code>A = P(x, f(x))</code> et <code>B = P(f(y), y)</code>.</p>
+        <table>
+            <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+            <tbody>
+                <tr><td>P(x, f(x))</td><td>P(f(y), y)</td><td><code>{x, f(y)}</code></td><td><code>{}</code></td></tr>
+                <tr><td>P(f(y), f(f(y)))</td><td>P(f(y), y)</td><td><code>{f(f(y)), y}</code></td><td><code>{x / f(y)}</code></td></tr>
+                <tr><td colspan="4" style="text-align:center; color:red; font-weight:bold;">ÉCHEC (Occur Check) : L'ensemble de désaccord est <code>{y, f(f(y))}</code>. La variable <code>y</code> apparaît dans le terme qui doit la remplacer.</td></tr>
+            </tbody>
+        </table>
+        
+        <h2 id="part4">Partie 4 : Le Principe de Résolution avec Unification</h2>
+        <h3 id="section4-1">4.1 La Règle du Résolvant Binaire</h3>
+        
+        <div class="box warning">
+            <div class="box-title">⚠️ Zone de Vigilance : Renommage des variables (Standardisation)</div>
+            Avant d'appliquer la résolution, il est <strong>impératif</strong> que les deux clauses n'aient <strong>aucune variable en commun</strong>. Si c'est le cas, il faut renommer les variables de l'une des clauses.
+        </div>
+        
+        <div class="box definition">
+            <div class="box-title">Règle de Résolution</div>
+            Soient deux clauses <code>C1 = L1 ∨ C1'</code> et <code>C2 = L2 ∨ C2'</code> (standardisées).
+            Si le littéral <code>L1</code> de C1 et la négation du littéral <code>L2</code> (<code>¬L2</code>) sont unifiables avec un PGU <code>σ</code>, alors on peut déduire une nouvelle clause, le <strong>résolvant</strong> :
+            <br>
+            <code>Résolvant = (C1'σ ∨ C2'σ)</code>
+            <br>
+            En d'autres termes, on applique le PGU au reste des deux clauses et on les combine.
+        </div>
+        
+        <div class="box example">
+            <div class="box-title">Exemple de Résolution</div>
+            Soit <code>C1 = P(x) ∨ Q(x)</code> et <code>C2 = ¬P(a) ∨ R(x)</code>.
+            <ol>
+                <li><strong>Standardisation :</strong> <code>x</code> est dans les deux clauses. On renomme <code>x</code> dans C2 en <code>y</code>.
+                    <br><code>C2' = ¬P(a) ∨ R(y)</code>.</li>
+                <li><strong>Choix des littéraux :</strong> On choisit <code>L1 = P(x)</code> de C1 et <code>L2 = ¬P(a)</code> de C2.</li>
+                <li><strong>Unification :</strong> On unifie <code>L1</code> et <code>¬L2</code>, c'est-à-dire <code>P(x)</code> et <code>P(a)</code>.
+                    <br>Le PGU est <code>σ = {x / a}</code>.</li>
+                <li><strong>Calcul du résolvant :</strong> On applique <code>σ</code> au reste des clauses (<code>Q(x)</code> et <code>R(y)</code>) et on les unit.
+                    <br><code>Q(x)σ = Q(a)</code>. <code>R(y)σ = R(y)</code> (car y n'est pas dans σ).
+                    <br>Résolvant = <code>Q(a) ∨ R(y)</code>.</li>
+            </ol>
+        </div>
+        
+        <h3 id="section4-2">4.2 La Preuve Complète par Réfutation</h3>
+        <p>Le processus est le même qu'en logique propositionnelle, mais la résolution utilise maintenant l'unification.</p>
+        <ol>
+            <li><strong>Prémisses et Négation :</strong> On prend les formules des hypothèses et on y ajoute la <strong>négation de la conclusion</strong>.</li>
+            <li><strong>Mise en Forme Clausale :</strong> On transforme <strong>chaque</strong> formule en un ensemble de clauses (FNP, Skolémisation, FNC, suppression des ∀).</li>
+            <li><strong>Résolution :</strong> On applique la règle de résolution (avec standardisation et unification) sur l'ensemble des clauses pour générer de nouvelles clauses.</li>
+            <li><strong>Clause Vide :</strong> Si on arrive à générer la clause vide (<code>□</code>), cela signifie que l'ensemble de départ était insatisfiable. La conclusion est donc prouvée.</li>
+        </ol>
+        
+        <div class="box exercise">
+            <div class="box-title">Mini-Exercice</div>
+            Soit <code>C1 = ¬Homme(x) ∨ Mortel(x)</code> et <code>C2 = Homme(Socrate)</code>. Quel est le résolvant ?
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    <ol>
+                        <li>Les clauses n'ont pas de variables communes. Pas besoin de renommer.</li>
+                        <li>On choisit <code>L1 = ¬Homme(x)</code> et <code>L2 = Homme(Socrate)</code>.</li>
+                        <li>On unifie <code>Homme(x)</code> et <code>Homme(Socrate)</code>. Le PGU est <code>σ = {x / Socrate}</code>.</li>
+                        <li>Le reste de C1 est <code>Mortel(x)</code>. Le reste de C2 est vide.</li>
+                        <li>On applique σ : <code>Mortel(x)σ = Mortel(Socrate)</code>.</li>
+                        <li><strong>Résolvant : <code>Mortel(Socrate)</code></strong>.</li>
+                    </ol>
+                </div>
+            </details>
+        </div>
+
+        <h2 id="part5">Partie 5 : Exercices d'Application Corrigés</h2>
+        
+        <h3 id="ex1">Exercice 1 : Unification (PGU)</h3>
+        <h4>Énoncé</h4>
+        <ol>
+            <li>A = Q(a, g(x, a), f(y)), B = Q(a, g(f(b), a), z)</li>
+            <li>A = P(x, y, f(g(z))), B = P(u, f(u), f(v))</li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. A = Q(a, g(x, a), f(y)), B = Q(a, g(f(b), a), z)</strong></p>
+            <table>
+                <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+                <tbody>
+                    <tr><td>Q(a, g(x, a), f(y))</td><td>Q(a, g(f(b), a), z)</td><td><code>{x, f(b)}</code></td><td><code>{}</code></td></tr>
+                    <tr><td>Q(a, g(f(b), a), f(y))</td><td>Q(a, g(f(b), a), z)</td><td><code>{f(y), z}</code></td><td><code>{x / f(b)}</code></td></tr>
+                    <tr><td>Q(a, g(f(b), a), f(y))</td><td>Q(a, g(f(b), a), f(y))</td><td><code>{}</code></td><td><strong><code>{x / f(b), z / f(y)}</code></strong></td></tr>
+                </tbody>
+            </table>
+            
+            <p><strong>2. A = P(x, y, f(g(z))), B = P(u, f(u), f(v))</strong></p>
+            <table>
+                <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+                <tbody>
+                    <tr><td>P(x, y, f(g(z)))</td><td>P(u, f(u), f(v))</td><td><code>{x, u}</code></td><td><code>{}</code></td></tr>
+                    <tr><td>P(u, y, f(g(z)))</td><td>P(u, f(u), f(v))</td><td><code>{y, f(u)}</code></td><td><code>{x / u}</code></td></tr>
+                    <tr><td>P(u, f(u), f(g(z)))</td><td>P(u, f(u), f(v))</td><td><code>{g(z), v}</code></td><td><code>{x / u, y / f(u)}</code></td></tr>
+                    <tr><td>P(u, f(u), f(g(z)))</td><td>P(u, f(u), f(g(z)))</td><td><code>{}</code></td><td><strong><code>{x / u, y / f(u), v / g(z)}</code></strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 id="ex2">Exercice 2 : Preuve par Résolution</h3>
+        <h4>Énoncé</h4>
+        <p>Montrez que {A, B} ⊨ C avec :<br>
+        A: ∀y ∀x (P(x, y) ⇒ Q(x, y))<br>
+        B: ∀y P(y, a)<br>
+        C: ∀y Q(y, a)</p>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Mise en Forme Clausale</strong></p>
+            <ul>
+                <li>A : <code>∀y ∀x (¬P(x, y) ∨ Q(x, y))</code> → <strong>Clause 1 : <code>¬P(x, y) ∨ Q(x, y)</code></strong></li>
+                <li>B : <code>∀y P(y, a)</code> → <strong>Clause 2 : <code>P(y1, a)</code></strong> (variable renommée)</li>
+                <li>¬C : <code>¬(∀y Q(y, a))</code> → <code>∃y ¬Q(y, a)</code> → (Skolem) <code>¬Q(c, a)</code> → <strong>Clause 3 : <code>¬Q(c, a)</code></strong></li>
+            </ul>
+            <p><strong>2. Preuve par Résolution</strong></p>
+            <ol>
+                <li><code>¬P(x, y) ∨ Q(x, y)</code></li>
+                <li><code>P(y1, a)</code></li>
+                <li><code>¬Q(c, a)</code></li>
+                <li><code>Q(y1, a)</code>  <em>(Résolution de 1 et 2 avec PGU <code>{x / y1, y / a}</code>)</em></li>
+                <li><code>□</code>  <em>(Résolution de 3 et 4 avec PGU <code>{y1 / c}</code>)</em></li>
+            </ol>
+            <p><strong>Conclusion :</strong> La dérivation de la clause vide prouve la conséquence logique.</p>
+        </div>
+
+        <h3 id="ex3">Exercice 3 : Preuve par Résolution</h3>
+        <h4>Énoncé</h4>
+        <p>1. {φ1, φ2} ⊨ φ3 avec φ1: ∀x (C(x) ⇒ W(x) ∧ R(x)), φ2: ∃x (C(x) ∧ O(x)), φ3: ∃x (O(x) ∧ R(x))</p>
+        <p>2. {φ1, φ2} ⊨ φ3 avec φ1: ∃x (P(x) ∧ ∀y (D(y) ⇒ L(x, y))), φ2: ∀x (P(x) ⇒ ∀y (Q(y) ⇒ ¬L(x, y))), φ3: ∀x (D(x) ⇒ ¬Q(x))</p>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. Premier ensemble de formules</strong></p>
+            <p><strong>Clauses :</strong></p>
+            <ol>
+                <li><code>¬C(x) ∨ W(x)</code>  (de φ1)</li>
+                <li><code>¬C(x) ∨ R(x)</code>  (de φ1)</li>
+                <li><code>C(c)</code>  (de φ2, skolem)</li>
+                <li><code>O(c)</code>  (de φ2, skolem)</li>
+                <li><code>¬O(x1) ∨ ¬R(x1)</code>  (de ¬φ3)</li>
+            </ol>
+            <p><strong>Résolution :</strong></p>
+            <ol start="6">
+                <li><code>R(c)</code>  <em>(Rés. de 2 et 3 avec PGU <code>{x/c}</code>)</em></li>
+                <li><code>¬R(c)</code>  <em>(Rés. de 4 et 5 avec PGU <code>{x1/c}</code>)</em></li>
+                <li><code>□</code>  <em>(Rés. de 6 et 7)</em></li>
+            </ol>
+            
+            <p><strong>2. Second ensemble de formules</strong></p>
+            <p><strong>Clauses :</strong></p>
+            <ol>
+                <li><code>P(c)</code> (de φ1, skolem)</li>
+                <li><code>¬D(y) ∨ L(c, y)</code> (de φ1)</li>
+                <li><code>¬P(x) ∨ ¬Q(y1) ∨ ¬L(x, y1)</code> (de φ2)</li>
+                <li><code>D(d)</code> (de ¬φ3, skolem)</li>
+                <li><code>Q(d)</code> (de ¬φ3, skolem)</li>
+            </ol>
+            <p><strong>Résolution :</strong></p>
+            <ol start="6">
+                <li><code>¬Q(y1) ∨ ¬L(c, y1)</code> <em>(Rés. de 1 et 3 avec PGU <code>{x/c}</code>)</em></li>
+                <li><code>¬D(y) ∨ ¬Q(y)</code> <em>(Rés. de 2 et 6 avec PGU <code>{y1/y}</code>)</em></li>
+                <li><code>¬Q(d)</code> <em>(Rés. de 4 et 7 avec PGU <code>{y/d}</code>)</em></li>
+                <li><code>□</code> <em>(Rés. de 5 et 8)</em></li>
+            </ol>
+        </div>
+
+        <h3 id="ex4">Exercice 4 : Unification (Cas d'échec)</h3>
+        <h4>Énoncé</h4>
+        <p>Calculer (lorsque c'est possible) le PGU pour :</p>
+        <ol>
+            <li>A = p(f(g(a, y)), z, y), B = p(f(z), x, f(b))</li>
+            <li>A = p(f(x), f(y), f(z)), B = p(g(x), g(y), g(z))</li>
+            <li>A = p(x, f(x), g(f(x), x)), B = p(z, f(f(g(a, z))), v)</li>
+        </ol>
+        <h4>Correction</h4>
+        <div class="solution">
+            <p><strong>1. A = p(f(g(a, y)), z, y), B = p(f(z), x, f(b))</strong></p>
+            <table>
+                <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+                <tbody>
+                    <tr><td>p(f(g(a, y)), z, y)</td><td>p(f(z), x, f(b))</td><td><code>{g(a, y), z}</code></td><td><code>{}</code></td></tr>
+                    <tr><td>p(f(g(a, y)), g(a, y), y)</td><td>p(f(g(a, y)), x, f(b))</td><td><code>{g(a, y), x}</code></td><td><code>{z / g(a, y)}</code></td></tr>
+                    <tr><td>p(f(g(a, y)), g(a, y), y)</td><td>p(f(g(a, y)), g(a, y), f(b))</td><td><code>{y, f(b)}</code></td><td><code>{z / g(a, y), x / g(a, y)}</code></td></tr>
+                    <tr><td colspan="4">Composition de <code>{y / f(b)}</code> avec σ. <strong>PGU final : <code>{y / f(b), z / g(a, f(b)), x / g(a, f(b))}</code></strong></td></tr>
+                </tbody>
+            </table>
+
+            <p><strong>2. A = p(f(x), f(y), f(z)), B = p(g(x), g(y), g(z))</strong></p>
+            <p>Le premier désaccord est <code>{f(x), g(x)}</code>. Les symboles racines <code>f</code> et <code>g</code> sont différents. C'est un <strong>échec de type "clash"</strong>. Les expressions ne sont pas unifiables.</p>
+            
+            <p><strong>3. A = p(x, f(x), g(f(x), x)), B = p(z, f(f(g(a, z))), v)</strong></p>
+            <table>
+                <thead><tr><th>Aσ</th><th>Bσ</th><th>Ensemble de Désaccord</th><th>σ (PGU)</th></tr></thead>
+                <tbody>
+                    <tr><td>p(x, f(x), ...)</td><td>p(z, f(f(g(a, z))), ...)</td><td><code>{x, z}</code></td><td><code>{}</code></td></tr>
+                    <tr><td>p(z, f(z), ...)</td><td>p(z, f(f(g(a, z))), ...)</td><td><code>{z, f(f(g(a, z)))}</code></td><td><code>{x / z}</code></td></tr>
+                    <tr><td colspan="4" style="text-align:center; color:red; font-weight:bold;">ÉCHEC (Occur Check) : La variable <code>z</code> apparaît dans le terme <code>f(f(g(a, z)))</code> qui doit la remplacer.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
