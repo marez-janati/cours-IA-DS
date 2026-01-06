@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours Interactif : Introduction à Prolog</title>
+    <style>
+        :root {
+            --color-primary: #4a6782;
+            --color-accent: #e67e22;
+            --color-text: #333333;
+            --color-bg: #fdfdfd;
+            --color-light-gray: #f4f4f4;
+            --color-border: #dddddd;
+            --font-body: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-code: 'Courier New', monospace;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-top: 30px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background-color: #e7e7e7;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #c7254e;
+        }
+
+        pre {
+            background-color: var(--color-light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--color-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Callout Boxes */
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+            background-color: var(--color-light-gray);
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .box.definition { border-color: #4285F4; }
+        .box.definition .box-title { color: #4285F4; }
+        .box.example { border-color: #34A853; }
+        .box.example .box-title { color: #34A853; }
+        .box.warning { border-color: #FBBC05; background-color: #fffbeb;}
+        .box.warning .box-title { color: #FBBC05; }
+        .box.exercise { border-color: #EA4335; }
+        .box.exercise .box-title { color: #EA4335; }
+
+        /* Interactive Details for Exercises */
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: var(--color-light-gray);
+        }
+        .solution {
+            padding: 10px 15px;
+            margin-top: 5px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: var(--color-light-gray);
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Math symbols */
+        .logic {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+        
+        /* Table of Contents */
+        #toc {
+            background: var(--color-light-gray);
+            border: 1px solid var(--color-border);
+            border-radius: 5px;
+            padding: 15px 25px;
+            margin-bottom: 40px;
+        }
+        #toc h3 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--color-primary);
+        }
+        #toc ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #toc ul li {
+            margin-bottom: 8px;
+        }
+        #toc ul ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+        
+        /* Specific Prolog Syntax Highlighting imitation */
+        .prolog-var { color: #9f6e08; font-weight: bold; }
+        .prolog-atom { color: #2c3e50; }
+        .prolog-comment { color: #7f8c8d; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Cours Interactif : Introduction à Prolog</h1>
+
+        <nav id="toc">
+            <h3>Table des Matières</h3>
+            <ul>
+                <li><a href="#part1">Partie 1 : Introduction et Concepts de Base</a>
+                    <ul>
+                        <li><a href="#section1-1">1.1. Programmation Logique vs Impérative</a></li>
+                        <li><a href="#section1-2">1.2. Les Clauses de Horn</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part2">Partie 2 : Syntaxe et Constituants</a>
+                    <ul>
+                        <li><a href="#section2-1">2.1. Faits, Règles et Questions</a></li>
+                        <li><a href="#section2-2">2.2. Syntaxe Spécifique Prolog</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part3">Partie 3 : Mécanisme de Résolution</a>
+                    <ul>
+                        <li><a href="#section3-1">3.1. L'Algorithme de Résolution</a></li>
+                        <li><a href="#section3-2">3.2. Stratégies et Risques (Boucles Infinies)</a></li>
+                    </ul>
+                </li>
+                 <li><a href="#part4">Partie 4 : Utilisation de SWI-Prolog</a></li>
+                <li><a href="#part5">Partie 5 : Exercices d'Application Corrigés</a>
+                    <ul>
+                        <li><a href="#ex1">Exercice 1 : Ancêtre (Ordre des solutions)</a></li>
+                        <li><a href="#ex2">Exercice 2 : Terminaison et Récursivité</a></li>
+                        <li><a href="#ex3">Exercice 3 : Arbres de Recherche</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <h2 id="part1">Partie 1 : Introduction et Concepts de Base</h2>
+
+        <h3 id="section1-1">1.1. Programmation Logique vs Impérative</h3>
+
+        <p>Prolog (PROgrammation en LOGique) est un langage dérivé du calcul des prédicats, créé en 1972 par Alain Colmerauer et Robert Kowalsky. C'est un langage déclaratif.</p>
+
+        <div class="box definition">
+            <div class="box-title">Langage Déclaratif</div>
+            On déclare le <strong>QUOI</strong> (de quoi est fait le problème), plutôt que le <strong>COMMENT</strong> (comment le résoudre).
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Programmation Logique (ex: Prolog)</th>
+                    <th>Programmation Impérative (ex: C, Java)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Formule</td><td>Procédure</td></tr>
+                <tr><td>Ensemble (conjonction) de formules</td><td>Programme</td></tr>
+                <tr><td>Question</td><td>Appel de procédure</td></tr>
+                <tr><td>Preuve</td><td>Exécution</td></tr>
+                <tr><td>Substitution (unification)</td><td>Passage de paramètres</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="section1-2">1.2. Les Clauses de Horn</h3>
+        <p>Pour des raisons de performance de calcul, Prolog restreint les formules utilisables aux <strong>clauses de Horn</strong>.</p>
+
+        <div class="box definition">
+            <div class="box-title">Clause de Horn</div>
+            Une clause de Horn est une disjonction de littéraux dont <strong>au plus un seul est positif</strong>.<br>
+            Si elle a exactement un littéral positif, c'est une <strong>clause définie</strong>.
+        </div>
+
+        <p>Structure d'une clause définie : <code>φ1 ∧ φ2 ∧ ... ∧ φn → ψ</code></p>
+        <ul>
+            <li><strong>ψ</strong> est la <em>tête</em> de la clause.</li>
+            <li><strong>φ1 ∧ ... ∧ φn</strong> est le <em>corps</em> de la clause.</li>
+        </ul>
+
+        <h4>Les trois types de clauses de Horn :</h4>
+        <ul>
+            <li><strong>Clause positive (Faits) :</strong> Pas de littéral négatif. <em>Exemple : p(a, b).</em></li>
+            <li><strong>Clause stricte (Règles) :</strong> Un littéral positif et au moins un négatif.
+                <br><code>p1 ∨ ¬n1 ∨ ... ∨ ¬nm</code> ≡ <code>(n1 ∧ ... ∧ nm) ⇒ p1</code>
+            </li>
+            <li><strong>Clause négative (Buts) :</strong> Pas de littéral positif.
+                <br><code>¬n1 ∨ ... ∨ ¬nk</code>.
+            </li>
+        </ul>
+
+        <h2 id="part2">Partie 2 : Syntaxe et Constituants</h2>
+
+        <h3 id="section2-1">2.1. Faits, Règles et Questions</h3>
+        <p>Un programme Prolog est constitué de trois éléments principaux :</p>
+        
+        <div class="box example">
+            <div class="box-title">1. Les Faits</div>
+            Ils affirment qu'une relation a lieu entre des objets.
+            <br><em>Exemple :</em> <code>pere(ali, mohamed).</code> affirme que Ali est le père de Mohamed.
+        </div>
+
+        <div class="box example">
+            <div class="box-title">2. Les Règles</div>
+            Elles permettent de déduire de nouveaux faits à partir d'hypothèses.
+            <br>Format : <code>A :- B1, B2, ..., Bn.</code> (A est vrai SI B1 et B2... sont vrais).
+            <br><em>Exemple :</em> <code>fils(X, Y) :- pere(Y, X), masculin(X).</code>
+        </div>
+
+        <div class="box example">
+            <div class="box-title">3. Les Questions (Buts)</div>
+            On demande au système si une relation est vraie. L'interpréteur répond <strong>Yes</strong> (avec les valeurs des variables si nécessaire) ou <strong>No</strong>.
+        </div>
+
+        <h3 id="section2-2">2.2. Syntaxe Spécifique Prolog</h3>
+        <p>Voici les conventions importantes de SWI-Prolog :</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Élément</th>
+                    <th>Règle</th>
+                    <th>Exemple</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Variables</strong></td>
+                    <td>Commencent par une <strong>Majuscule</strong> ou <code>_</code></td>
+                    <td><code>X</code>, <code>Resultat</code>, <code>_valeur</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Atomes (Constantes, Prédicats)</strong></td>
+                    <td>Commencent par une <strong>minuscule</strong></td>
+                    <td><code>ali</code>, <code>pere</code>, <code>x</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Fin d'instruction</strong></td>
+                    <td>Point obligatoire</td>
+                    <td><code>fait(a).</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Opérateurs Logiques</strong></td>
+                    <td>ET = <code>,</code> | OU = <code>;</code> | SI = <code>:-</code></td>
+                    <td><code>a :- b, c.</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="part3">Partie 3 : Mécanisme de Résolution</h2>
+
+        <h3 id="section3-1">3.1. L'Algorithme de Résolution</h3>
+        <p>Pour répondre à une question, Prolog construit un <strong>arbre de recherche SLD</strong> (Sélection Linéaire Définie).</p>
+        <ul>
+            <li>Il cherche à unifier le but avec la tête d'une clause.</li>
+            <li>Il utilise l'algorithme d'<strong>unification</strong> de Robinson (trouver le substitut le plus général pour rendre deux termes identiques).</li>
+        </ul>
+
+        <div class="box definition">
+            <div class="box-title">Stratégie de Prolog</div>
+            <ol>
+                <li><strong>Choix du littéral :</strong> Prolog choisit toujours le littéral le plus à <strong>gauche</strong> dans la liste des buts.</li>
+                <li><strong>Choix de la clause :</strong> Prolog parcourt les règles du programme de <strong>haut en bas</strong> (ordre d'écriture).</li>
+                <li><strong>Parcours :</strong> Prolog utilise un parcours en <strong>profondeur d'abord</strong> (Depth-First) avec retour en arrière (backtracking) en cas d'échec.</li>
+            </ol>
+        </div>
+
+        <h3 id="section3-2">3.2. Stratégies et Risques (Boucles Infinies)</h3>
+        <p>La stratégie en profondeur d'abord de Prolog n'est pas complète : elle peut tomber dans des branches infinies.</p>
+
+        <div class="box warning">
+            <div class="box-title">⚠️ Attention : L'ordre compte !</div>
+            L'ordre des règles dans le programme et l'ordre des littéraux dans le corps d'une règle sont cruciaux. Un mauvais ordre peut entraîner une <strong>boucle infinie</strong>.
+        </div>
+
+        <div class="box example">
+            <div class="box-title">Exemple de boucle</div>
+            <pre><code>d.
+a :- b.
+b :- c.
+c :- a.  /* Boucle ici si on demande 'a' */
+c :- d.</code></pre>
+            <p>Prolog va tenter <code>a -> b -> c -> a -> ...</code> indéfiniment. Si on inverse les deux dernières lignes, Prolog trouvera la solution <code>d</code> avant de boucler.</p>
+        </div>
+
+        <h2 id="part4">Partie 4 : Utilisation de SWI-Prolog</h2>
+        <p>Quelques commandes utiles pour l'interpréteur :</p>
+        <ul>
+            <li>Charger un fichier : <code>consult('mon_fichier.pl').</code> ou <code>['mon_fichier.pl'].</code></li>
+            <li>Écrire dans le terminal : <code>[user].</code> (Faire CTRL+D pour finir).</li>
+            <li>Lister les clauses : <code>listing(nom_predicat).</code></li>
+            <li>Quitter : <code>halt.</code></li>
+            <li>Activer le mode trace (debug) : <code>trace.</code> (Désactiver avec <code>notrace.</code>).</li>
+        </ul>
+
+        <h2 id="part5">Partie 5 : Exercices d'Application Corrigés</h2>
+
+        <h3 id="ex1">Exercice 1 : Ancêtre (Ordre des solutions)</h3>
+        <p>Soit le programme suivant :</p>
+        <pre><code>parent(fatma, ali). 
+parent(ali, mohamed). 
+parent(mohamed, jamel). 
+parent(jamel, yassine). 
+
+ancetre(X, Y) :- parent(X,Y).
+ancetre(X, Z) :- parent(X,W), ancetre(W,Z).</code></pre>
+        
+        <div class="box exercise">
+            <div class="box-title">Question 1</div>
+            Quelles sont les solutions retournées par Prolog pour la question <code>ancetre(fatma, X).</code> et dans quel ordre ?
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    Prolog explore d'abord la première règle (parent direct), puis la seconde (récursive).
+                    <ol>
+                        <li>X = ali (via la règle 1)</li>
+                        <li>X = mohamed (via la règle 2 -> parent(fatma, ali), ancetre(ali, X))</li>
+                        <li>X = jamel</li>
+                        <li>X = yassine</li>
+                    </ol>
+                </div>
+            </details>
+        </div>
+
+        <div class="box exercise">
+            <div class="box-title">Question 2</div>
+            Si on permute l'ordre des deux règles définissant <code>ancetre</code>, quel sera le nouvel ordre des solutions ?
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    Prolog explorera d'abord la branche récursive (le plus profond) avant le fait direct.
+                    L'ordre sera inversé :
+                    <ol>
+                        <li>X = yassine</li>
+                        <li>X = jamel</li>
+                        <li>X = mohamed</li>
+                        <li>X = ali</li>
+                    </ol>
+                    <strong>Conclusion :</strong> L'ordre des règles détermine l'ordre des solutions.
+                </div>
+            </details>
+        </div>
+
+        <h3 id="ex2">Exercice 2 : Terminaison et Récursivité</h3>
+        <p>On veut définir une relation symétrique "marié".</p>
+        <pre><code>married(X, Y) :- married(Y, X).</code></pre>
+        <div class="box warning">
+            <div class="box-title">Analyse</div>
+            Si on pose la question <code>married(ali, fatma)</code>, Prolog va appeler <code>married(fatma, ali)</code>, qui va appeler <code>married(ali, fatma)</code>...
+            <br>C'est une <strong>récursivité gauche</strong> qui entraîne une boucle infinie immédiate.
+        </div>
+        
+        <div class="box example">
+            <div class="box-title">La bonne pratique</div>
+            Il faut distinguer la relation de base de la propriété symétrique en créant un nouveau prédicat :
+            <pre><code>are_married(X, Y) :- married(X, Y).
+are_married(X, Y) :- married(Y, X).</code></pre>
+        </div>
+
+        <h3 id="ex3">Exercice 3 : Arbres de Recherche</h3>
+        <p>Soit le programme P :</p>
+        <pre><code>b(1).
+b(2).
+c(3).
+c(4).
+d(4).
+a(X) :- b(X). 
+a(X) :- c(X), d(X).</code></pre>
+
+        <div class="box exercise">
+            <div class="box-title">Question</div>
+            Donnez les solutions pour le but <code>a(X)</code>.
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+                    Prolog construit l'arbre suivant :
+                    <ol>
+                        <li>Il tente la première règle : <code>a(X) :- b(X).</code>
+                            <ul>
+                                <li>Unification avec <code>b(1)</code> -> <strong>Solution X = 1</strong></li>
+                                <li>Unification avec <code>b(2)</code> -> <strong>Solution X = 2</strong></li>
+                            </ul>
+                        </li>
+                        <li>Il tente la seconde règle : <code>a(X) :- c(X), d(X).</code>
+                            <ul>
+                                <li>Unification avec <code>c(3)</code>. Nouveau but : <code>d(3)</code>. Échec (pas de fait d(3)).</li>
+                                <li>Unification avec <code>c(4)</code>. Nouveau but : <code>d(4)</code>.
+                                    <ul>
+                                        <li>Unification avec <code>d(4)</code> -> Succès. <strong>Solution X = 4</strong>.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+                    Solutions finales : 1, 2, 4.
+                </div>
+            </details>
+        </div>
+
+    </div>
+</body>
+</html>
