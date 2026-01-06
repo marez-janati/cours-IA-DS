@@ -578,25 +578,27 @@ appreciation(Note, 'Mauvais')   :- Note >= 0.     /* Par défaut si on arrive ic
 
         // Graph 4: Detailed Cut Example
         const graphCutExample = `
-        graph TD
-            subgraph "Sans Coupure: p(X,Y) :- q(X), r(X,Y)."
-                NC_Root[p] --> NC_Q1[q(a)]
-                NC_Root --> NC_Q2[q(b)]
-                NC_Q1 --> NC_R1[r(a, a1)]
-                NC_Q1 --> NC_R2[r(a, a2)]
-                NC_Q2 --> NC_R3[r(b, b1)]
-            end
-            
-            subgraph "Avec Coupure: p(X,Y) :- q(X), !, r(X,Y)."
-                C_Root[p] --> C_Q1[q(a)]
-                C_Q1 --> Cut{{CUT !}}
-                Cut --> C_R1[r(a, a1)]
-                Cut --> C_R2[r(a, a2)]
-                
-                C_Root -.->|Coupé| C_Q2[q(b)]
-                style C_Q2 fill:#f8d7da,stroke-dasharray: 5 5
-                style Cut fill:#ffc107
-            end
+       graph TD
+    subgraph SG1 ["Sans Coupure: p(X,Y) :- q(X), r(X,Y)"]
+        NC_Root["p(X,Y)"] --> NC_Q1["q(a)"]
+        NC_Root --> NC_Q2["q(b)"]
+        NC_Q1 --> NC_R1["r(a, a1)"]
+        NC_Q1 --> NC_R2["r(a, a2)"]
+        NC_Q2 --> NC_R3["r(b, b1)"]
+    end
+    
+    subgraph SG2 ["Avec Coupure: p(X,Y) :- q(X), !, r(X,Y)"]
+        C_Root["p(X,Y)"] --> C_Q1["q(a)"]
+        C_Q1 --> Cut{{"! (CUT)"}}
+        
+        Cut --> C_R1["r(a, a1)"]
+        Cut --> C_R2["r(a, a2)"]
+        
+        C_Root -.->|Coupé| C_Q2["q(b)"]
+    end
+
+    style C_Q2 fill:#f8d7da,stroke:#dc3545,stroke-dasharray: 5 5
+    style Cut fill:#ffc107,stroke:#333
         `;
         window.renderGraph('graph-cut-example', graphCutExample);
 
