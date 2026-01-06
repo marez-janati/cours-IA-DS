@@ -203,6 +203,16 @@
         .prolog-var { color: #9f6e08; font-weight: bold; }
         .prolog-atom { color: #2c3e50; }
         .prolog-comment { color: #7f8c8d; font-style: italic; }
+
+        /* Mermaid Container */
+        .mermaid-viz {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -253,6 +263,9 @@
             On déclare le <strong>QUOI</strong> (de quoi est fait le problème), plutôt que le <strong>COMMENT</strong> (comment le résoudre).
         </div>
 
+        <!-- VISUALISATION: Declarative vs Imperative -->
+        <div id="graph-paradigms" class="mermaid-viz"></div>
+
         <table>
             <thead>
                 <tr>
@@ -279,6 +292,10 @@
         </div>
 
         <p>Structure d'une clause définie : <code>φ1 ∧ φ2 ∧ ... ∧ φn → ψ</code></p>
+        
+        <!-- VISUALISATION: Horn Clause Structure -->
+        <div id="graph-horn" class="mermaid-viz"></div>
+
         <ul>
             <li><strong>ψ</strong> est la <em>tête</em> de la clause.</li>
             <li><strong>φ1 ∧ ... ∧ φn</strong> est le <em>corps</em> de la clause.</li>
@@ -300,6 +317,9 @@
         <h3 id="section2-1">2.1. Faits, Règles et Questions</h3>
         <p>Un programme Prolog est constitué de trois éléments principaux :</p>
         
+        <!-- VISUALISATION: Program Constituents -->
+        <div id="graph-constituents" class="mermaid-viz"></div>
+
         <div class="box example">
             <div class="box-title">1. Les Faits</div>
             Ils affirment qu'une relation a lieu entre des objets.
@@ -370,6 +390,9 @@
             </ol>
         </div>
 
+        <!-- VISUALISATION: Resolution Strategy -->
+        <div id="graph-resolution" class="mermaid-viz"></div>
+
         <h3 id="section3-2">3.2. Stratégies et Risques (Boucles Infinies)</h3>
         <p>La stratégie en profondeur d'abord de Prolog n'est pas complète : elle peut tomber dans des branches infinies.</p>
 
@@ -386,6 +409,9 @@ b :- c.
 c :- a.  /* Boucle ici si on demande 'a' */
 c :- d.</code></pre>
             <p>Prolog va tenter <code>a -> b -> c -> a -> ...</code> indéfiniment. Si on inverse les deux dernières lignes, Prolog trouvera la solution <code>d</code> avant de boucler.</p>
+            
+            <!-- VISUALISATION: Infinite Loop -->
+            <div id="graph-loop" class="mermaid-viz"></div>
         </div>
 
         <h2 id="part4">Partie 4 : Utilisation de SWI-Prolog</h2>
@@ -416,7 +442,9 @@ ancetre(X, Z) :- parent(X,W), ancetre(W,Z).</code></pre>
             <details>
                 <summary>Voir la solution</summary>
                 <div class="solution">
-                    Prolog explore d'abord la première règle (parent direct), puis la seconde (récursive).
+                    <p>Prolog explore d'abord la première règle (parent direct), puis la seconde (récursive).</p>
+                    <!-- VISUALISATION: Ancestor Standard Order -->
+                    <div id="graph-ancestor-1" class="mermaid-viz"></div>
                     <ol>
                         <li>X = ali (via la règle 1)</li>
                         <li>X = mohamed (via la règle 2 -> parent(fatma, ali), ancetre(ali, X))</li>
@@ -433,8 +461,9 @@ ancetre(X, Z) :- parent(X,W), ancetre(W,Z).</code></pre>
             <details>
                 <summary>Voir la solution</summary>
                 <div class="solution">
-                    Prolog explorera d'abord la branche récursive (le plus profond) avant le fait direct.
-                    L'ordre sera inversé :
+                    <p>Prolog explorera d'abord la branche récursive (le plus profond) avant le fait direct.</p>
+                    <!-- VISUALISATION: Ancestor Permuted Order -->
+                    <div id="graph-ancestor-2" class="mermaid-viz"></div>
                     <ol>
                         <li>X = yassine</li>
                         <li>X = jamel</li>
@@ -453,6 +482,8 @@ ancetre(X, Z) :- parent(X,W), ancetre(W,Z).</code></pre>
             <div class="box-title">Analyse</div>
             Si on pose la question <code>married(ali, fatma)</code>, Prolog va appeler <code>married(fatma, ali)</code>, qui va appeler <code>married(ali, fatma)</code>...
             <br>C'est une <strong>récursivité gauche</strong> qui entraîne une boucle infinie immédiate.
+            <!-- VISUALISATION: Left Recursion Loop -->
+            <div id="graph-recursion-loop" class="mermaid-viz"></div>
         </div>
         
         <div class="box example">
@@ -478,7 +509,9 @@ a(X) :- c(X), d(X).</code></pre>
             <details>
                 <summary>Voir la solution</summary>
                 <div class="solution">
-                    Prolog construit l'arbre suivant :
+                    <p>Prolog construit l'arbre suivant :</p>
+                    <!-- VISUALISATION: SLD Tree for a(X) -->
+                    <div id="graph-sld-tree" class="mermaid-viz"></div>
                     <ol>
                         <li>Il tente la première règle : <code>a(X) :- b(X).</code>
                             <ul>
@@ -503,5 +536,233 @@ a(X) :- c(X), d(X).</code></pre>
         </div>
 
     </div>
+
+    <!-- MERMAID RENDERER SCRIPT -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // 1. Initialize configuration
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        /**
+         * Renders a Mermaid graph into a specific HTML container.
+         * @param {string} elementId - The ID of the div where you want the graph.
+         * @param {string} graphCode - The raw Mermaid text code.
+         */
+        window.renderGraph = async function(elementId, graphCode) {
+            try {
+                const container = document.getElementById(elementId);
+                if (!container) {
+                    console.error(`Container with ID "${elementId}" not found.`);
+                    return;
+                }
+
+                // Clear previous content
+                container.innerHTML = '';
+
+                // Generate a unique ID for the SVG to prevent conflicts
+                const id = `graph-svg-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+                // Render the graph (returns an object with the SVG string)
+                const { svg } = await mermaid.render(id, graphCode);
+                
+                // Inject the SVG into your container
+                container.innerHTML = svg;
+                
+            } catch (error) {
+                console.error('Mermaid syntax error for ' + elementId + ':', error);
+                document.getElementById(elementId).innerHTML = 
+                    `<p style="color:red; font-weight:bold;">Graph Syntax Error (Check Console)</p>`;
+            }
+        };
+
+        // 2. Define Graphs and Render
+        
+        // Graph 1: Paradigms
+        const graphParadigms = `
+        graph TD
+            subgraph "Programmation Impérative"
+                I1[Instruction 1] --> I2[Instruction 2]
+                I2 --> I3[Instruction 3]
+                I3 --> I_End((Résultat))
+            end
+            subgraph "Programmation Logique"
+                KB[("Base de Connaissances<br>(Faits + Règles)")] 
+                Q[/? Question ?/]
+                KB --> Engine[[Moteur d'Inférence]]
+                Q --> Engine
+                Engine --> Ans([Réponse: Vrai/Faux/Valeurs])
+            end
+            style Engine fill:#e1f5fe,stroke:#01579b
+        `;
+        window.renderGraph('graph-paradigms', graphParadigms);
+
+        // Graph 2: Horn Clause
+        const graphHorn = `
+        graph LR
+            Body["Corps<br>(Conditions)"] -->|Implique| Head["Tête<br>(Conclusion)"]
+            subgraph "Exemple: fils(X,Y)"
+                B1["pere(Y, X)"] & B2["masculin(X)"] --> H1["fils(X, Y)"]
+            end
+            style Head fill:#d4edda,stroke:#28a745
+            style Body fill:#fff3cd,stroke:#ffc107
+        `;
+        window.renderGraph('graph-horn', graphHorn);
+
+        // Graph 3: Constituents
+        const graphConstituents = `
+        graph TD
+            Prog[Programme Prolog]
+            Prog --> Facts[Faits]
+            Prog --> Rules[Règles]
+            Prog --> Queries[Questions / Buts]
+            
+            Facts --> F_Ex["pere(ali, mohamed)."]
+            Rules --> R_Ex["fils(X,Y) :- pere(Y,X)."]
+            Queries --> Q_Ex["?- fils(mohamed, ali)."]
+            
+            style Facts fill:#e2e3e5
+            style Rules fill:#e2e3e5
+            style Queries fill:#e2e3e5
+        `;
+        window.renderGraph('graph-constituents', graphConstituents);
+
+        // Graph 4: Resolution Strategy
+        const graphResolution = `
+        graph TD
+            Start((Début)) --> Goal[Liste de Buts]
+            Goal --> Select{Sélectionner<br>But de Gauche}
+            Select --> FindRule{Chercher Règle<br>dans KB}
+            
+            FindRule -->|Trouvée| Unify[Unification]
+            FindRule -->|Non Trouvée| Fail[Échec / Backtrack]
+            
+            Unify -->|Succès| NewGoal[Remplacer But par<br>Corps de la Règle]
+            Unify -->|Échec| Fail
+            
+            NewGoal --> IsEmpty{Liste Vide?}
+            IsEmpty -->|Oui| Success((Succès))
+            IsEmpty -->|Non| Select
+            
+            Fail --> Backtrack[Remonter au<br>dernier choix]
+            Backtrack --> FindRule
+            
+            style Success fill:#d4edda,stroke:#28a745
+            style Fail fill:#f8d7da,stroke:#dc3545
+        `;
+        window.renderGraph('graph-resolution', graphResolution);
+
+        // Graph 5: Infinite Loop
+        const graphLoop = `
+        graph TD
+            Q[? a] -->|Règle: a :- b| B[? b]
+            B -->|Règle: b :- c| C[? c]
+            C -->|Règle: c :- a| A_Recur[? a]
+            A_Recur -.->|Boucle Infinie| Q
+            style A_Recur fill:#f8d7da,stroke:#dc3545,stroke-width:2px
+        `;
+        window.renderGraph('graph-loop', graphLoop);
+
+        // Graph 6: Ancestor Standard Order (Detailed)
+        const graphAncestor1 = `
+        graph TD
+            %% Styles
+            classDef solution fill:#d4edda,stroke:#28a745,stroke-width:2px;
+            classDef goal fill:#e2e3e5,stroke:#6c757d,stroke-width:2px;
+
+            Root[("ancetre(fatma, Reponse)")]:::goal
+
+            %% BRANCHE 1
+            Root -- "Règle 1: parent(fatma, Reponse)" --> Goal1["parent(fatma, Reponse)"]:::goal
+            Goal1 -- "Unif: parent(fatma, ali)" --> Sol1("SUCCÈS #1<br>Reponse = ali"):::solution
+
+            %% BRANCHE 2
+            Root -- "Backtrack Règle 2" --> Goal2["parent(fatma, W), ancetre(W, Reponse)"]:::goal
+            Goal2 -- "W=ali" --> Goal2_Step2["ancetre(ali, Reponse)"]:::goal
+
+                %% SOUS-BRANCHE 2.1
+                Goal2_Step2 -- "Règle 1: parent(ali, Reponse)" --> Goal2_1["parent(ali, Reponse)"]:::goal
+                Goal2_1 -- "Unif: parent(ali, mohamed)" --> Sol2("SUCCÈS #2<br>Reponse = mohamed"):::solution
+
+                %% SOUS-BRANCHE 2.2
+                Goal2_Step2 -- "Backtrack Règle 2" --> Goal2_2["parent(ali, W2), ancetre(W2, Reponse)"]:::goal
+                Goal2_2 -- "W2=mohamed" --> Goal2_2_Step2["ancetre(mohamed, Reponse)"]:::goal
+
+                    %% SOUS-SOUS-BRANCHE 2.2.1
+                    Goal2_2_Step2 -- "Règle 1" --> Sol3("SUCCÈS #3<br>Reponse = jamel"):::solution
+
+                    %% SOUS-SOUS-BRANCHE 2.2.2 (Simplifiée pour l'affichage)
+                    Goal2_2_Step2 -- "Règle 2 (via Jamel)" --> Sol4("SUCCÈS #4<br>Reponse = yassine"):::solution
+        `;
+        window.renderGraph('graph-ancestor-1', graphAncestor1);
+
+        // Graph 7: Ancestor Permuted Order
+        const graphAncestor2 = `
+        graph TD
+            classDef solution fill:#d4edda,stroke:#28a745,stroke-width:2px;
+            classDef goal fill:#e2e3e5,stroke:#6c757d,stroke-width:2px;
+            classDef fail fill:#f8d7da,stroke:#dc3545;
+
+            Root[("ancetre(fatma, Reponse)")]:::goal
+
+            %% Deep Dive First
+            Root -- "Règle 1 (Récursive)" --> Lvl1["ancetre(ali, Reponse)"]:::goal
+            Lvl1 -- "Règle 1 (Récursive)" --> Lvl2["ancetre(mohamed, Reponse)"]:::goal
+            Lvl2 -- "Règle 1 (Récursive)" --> Lvl3["ancetre(jamel, Reponse)"]:::goal
+            Lvl3 -- "Règle 1 (Récursive)" --> Lvl4["ancetre(yassine, Reponse)"]:::goal
+            
+            Lvl4 -- "Règle 1 (Pas d'enfant)" --> Fail1((Échec)):::fail
+            Lvl4 -- "Backtrack Règle 2 (Base)" --> Fail2((Échec)):::fail
+
+            %% Solving on the way up
+            Lvl3 -- "Backtrack Règle 2 (Base)" --> Sol1("SUCCÈS #1<br>yassine"):::solution
+            Lvl2 -- "Backtrack Règle 2 (Base)" --> Sol2("SUCCÈS #2<br>jamel"):::solution
+            Lvl1 -- "Backtrack Règle 2 (Base)" --> Sol3("SUCCÈS #3<br>mohamed"):::solution
+            Root -- "Backtrack Règle 2 (Base)" --> Sol4("SUCCÈS #4<br>ali"):::solution
+        `;
+        window.renderGraph('graph-ancestor-2', graphAncestor2);
+
+        // Graph 8: Recursion Loop
+        const graphRecLoop = `
+        graph LR
+            Q["married(ali, fatma)"] -->|Appelle| Q2["married(fatma, ali)"]
+            Q2 -->|Appelle| Q3["married(ali, fatma)"]
+            Q3 -.->|Boucle| Q2
+            style Q3 fill:#f8d7da,stroke:#dc3545
+        `;
+        window.renderGraph('graph-recursion-loop', graphRecLoop);
+
+        // Graph 9: SLD Tree for a(X)
+        const graphSLD = `
+        graph TD
+            classDef solution fill:#d4edda,stroke:#28a745;
+            classDef fail fill:#f8d7da,stroke:#dc3545;
+            
+            Root["a(X)"] 
+            
+            Root -- "R1: a(X) :- b(X)" --> B["b(X)"]
+            B -- "Unif: b(1)" --> S1("X = 1"):::solution
+            B -- "Unif: b(2)" --> S2("X = 2"):::solution
+            
+            Root -- "R2: a(X) :- c(X), d(X)" --> C["c(X), d(X)"]
+            
+            C -- "Unif: c(3)" --> D1["d(3)"]
+            D1 -- "Pas de fait d(3)" --> F1((Échec)):::fail
+            
+            C -- "Unif: c(4)" --> D2["d(4)"]
+            D2 -- "Unif: d(4)" --> S3("X = 4"):::solution
+        `;
+        window.renderGraph('graph-sld-tree', graphSLD);
+
+    </script>
 </body>
 </html>
