@@ -167,6 +167,16 @@
         tr:hover {
             background-color: #e9ecef;
         }
+
+        /* Mermaid Container */
+        .mermaid-viz {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -232,6 +242,9 @@
         <h3 id="section1-2">1.2. Unification vs Évaluation</h3>
         <p>C'est une distinction fondamentale en Prolog. Le signe <code>=</code> ne fait pas de calcul, il unifie des termes.</p>
 
+        <!-- VISUALISATION: Unification vs Evaluation -->
+        <div id="graph-arithmetic" class="mermaid-viz"></div>
+
         <div class="box warning">
             <div class="box-title">Attention : = vs IS</div>
             <ul>
@@ -269,6 +282,9 @@ X = 2 + 3.</code></pre>
 
         <h3 id="section2-1">2.1. Structure et Notation</h3>
         <p>La liste est une séquence ordonnée d'éléments de longueur variable. Elle peut être vide (<code>[]</code>) ou composée d'une tête et d'un reste.</p>
+
+        <!-- VISUALISATION: List Structure -->
+        <div id="graph-list-structure" class="mermaid-viz"></div>
 
         <div class="box definition">
             <div class="box-title">Notation [T | R]</div>
@@ -319,6 +335,9 @@ X = 2 + 3.</code></pre>
             </ol>
         </div>
 
+        <!-- VISUALISATION: Cut Concept -->
+        <div id="graph-cut-concept" class="mermaid-viz"></div>
+
         <p><strong>Utilités principales :</strong></p>
         <ul>
             <li><strong>Solution unique :</strong> Arrêter la recherche dès qu'une solution est trouvée (optimisation).</li>
@@ -337,11 +356,18 @@ r(a,a1). r(a,a2). r(b,b1).</code></pre>
             <li><code>p(X,Y) :- q(X), r(X,Y), !.</code> : Donne <strong>une seule solution</strong> (la toute première trouvée), puis arrête tout.</li>
             <li><code>p(X,Y) :- q(X), !, r(X,Y).</code> : Trouve un <code>q(X)</code> (le premier, 'a'), fige ce choix, puis cherche tous les <code>r(a, Y)</code> possibles. Il ne tentera jamais <code>q(b)</code>.</li>
         </ul>
+        
+        <!-- VISUALISATION: Detailed Cut Example -->
+        <div id="graph-cut-example" class="mermaid-viz"></div>
 
         <h2 id="part4">Partie 4 : Négation et Disjonction</h2>
 
         <h3 id="section4-1">La Négation (not)</h3>
         <p>La négation en Prolog (<code>not(P)</code> ou <code>\+ P</code>) est une "négation par échec". Elle réussit si P échoue.</p>
+        
+        <!-- VISUALISATION: Negation Logic -->
+        <div id="graph-negation" class="mermaid-viz"></div>
+
         <div class="box warning">
             <div class="box-title">Limitation</div>
             Pour que <code>not(P)</code> fonctionne correctement, toutes les variables de P doivent être instanciées (liées) au moment de l'appel.
@@ -378,6 +404,8 @@ factoriel(N, R) :-
     N1 is N - 1, 
     factoriel(N1, R1), 
     R is N * R1.</code></pre>
+                    <!-- VISUALISATION: Factorial Execution -->
+                    <div id="graph-factorial" class="mermaid-viz"></div>
                 </div>
             </details>
         </div>
@@ -407,6 +435,8 @@ longueur([_|Queue], N) :-
 /* Concaténation */
 concat([], L, L).
 concat([X|L1], L2, [X|L3]) :- concat(L1, L2, L3).</code></pre>
+                    <!-- VISUALISATION: Concat Execution -->
+                    <div id="graph-concat" class="mermaid-viz"></div>
                 </div>
             </details>
         </div>
@@ -430,8 +460,216 @@ appreciation(Note, 'Tres-bien') :- Note >= 16, !.
 appreciation(Note, 'Bien')      :- Note >= 11, !. /* Inutile de tester < 16 grâce au Cut précédent */
 appreciation(Note, 'Passable')  :- Note >= 7, !.
 appreciation(Note, 'Mauvais')   :- Note >= 0.     /* Par défaut si on arrive ici */</code></pre>
+                    <!-- VISUALISATION: Appreciation Decision Tree -->
+                    <div id="graph-appreciation" class="mermaid-viz"></div>
                 </div>
             </details>
         </div>
 
-    </d
+    </div>
+
+    <!-- MERMAID RENDERER SCRIPT -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // 1. Initialize configuration
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        /**
+         * Renders a Mermaid graph into a specific HTML container.
+         * @param {string} elementId - The ID of the div where you want the graph.
+         * @param {string} graphCode - The raw Mermaid text code.
+         */
+        window.renderGraph = async function(elementId, graphCode) {
+            try {
+                const container = document.getElementById(elementId);
+                if (!container) {
+                    console.error(`Container with ID "${elementId}" not found.`);
+                    return;
+                }
+
+                // Clear previous content
+                container.innerHTML = '';
+
+                // Generate a unique ID for the SVG to prevent conflicts
+                const id = `graph-svg-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+                // Render the graph (returns an object with the SVG string)
+                const { svg } = await mermaid.render(id, graphCode);
+                
+                // Inject the SVG into your container
+                container.innerHTML = svg;
+                
+            } catch (error) {
+                console.error('Mermaid syntax error for ' + elementId + ':', error);
+                document.getElementById(elementId).innerHTML = 
+                    `<p style="color:red; font-weight:bold;">Graph Syntax Error (Check Console)</p>`;
+            }
+        };
+
+        // 2. Define Graphs and Render
+
+        // Graph 1: Arithmetic (Unification vs Evaluation)
+        const graphArithmetic = `
+        graph TD
+            subgraph "Unification (=)"
+                U1["X = 2 + 3"] -->|Résultat| U2["X = +(2, 3)"]
+                style U2 fill:#e2e3e5
+            end
+            subgraph "Évaluation (is)"
+                E1["X is 2 + 3"] -->|Calcul| E2["2 + 3 = 5"]
+                E2 -->|Résultat| E3["X = 5"]
+                style E3 fill:#d4edda,stroke:#28a745
+            end
+        `;
+        window.renderGraph('graph-arithmetic', graphArithmetic);
+
+        // Graph 2: List Structure
+        const graphListStructure = `
+        graph LR
+            L["Liste: [a, b, c]"]
+            
+            subgraph "Structure Interne (Cons)"
+                Cell1[".(a, ...)"] -->|Tête| A((a))
+                Cell1 -->|Queue| Cell2[".(b, ...)"]
+                Cell2 -->|Tête| B((b))
+                Cell2 -->|Queue| Cell3[".(c, ...)"]
+                Cell3 -->|Tête| C((c))
+                Cell3 -->|Queue| Empty["[] (Vide)"]
+            end
+            
+            L -.-> Cell1
+            style Empty fill:#f8d7da
+        `;
+        window.renderGraph('graph-list-structure', graphListStructure);
+
+        // Graph 3: Cut Concept
+        const graphCutConcept = `
+        graph TD
+            Root((P))
+            Root --> Branch1
+            Root --> Branch2
+            Root --> Branch3
+            
+            Branch2 --> Step1[Étape 1]
+            Step1 --> Cut{CUT !}
+            
+            Cut -->|Succès| Step2[Suite...]
+            
+            Cut -.->|Pruned| Alt1[Choix Alternatif 1]
+            Cut -.->|Pruned| Alt2[Choix Alternatif 2]
+            Branch3 -.->|Pruned| B3Node[Branche 3]
+            
+            style Cut fill:#ffc107,stroke:#333
+            style Alt1 stroke-dasharray: 5 5,color:#999
+            style Alt2 stroke-dasharray: 5 5,color:#999
+            style B3Node stroke-dasharray: 5 5,color:#999
+        `;
+        window.renderGraph('graph-cut-concept', graphCutConcept);
+
+        // Graph 4: Detailed Cut Example
+        const graphCutExample = `
+        graph TD
+            subgraph "Sans Coupure: p(X,Y) :- q(X), r(X,Y)."
+                NC_Root[p] --> NC_Q1[q(a)]
+                NC_Root --> NC_Q2[q(b)]
+                NC_Q1 --> NC_R1[r(a, a1)]
+                NC_Q1 --> NC_R2[r(a, a2)]
+                NC_Q2 --> NC_R3[r(b, b1)]
+            end
+            
+            subgraph "Avec Coupure: p(X,Y) :- q(X), !, r(X,Y)."
+                C_Root[p] --> C_Q1[q(a)]
+                C_Q1 --> Cut{{CUT !}}
+                Cut --> C_R1[r(a, a1)]
+                Cut --> C_R2[r(a, a2)]
+                
+                C_Root -.->|Coupé| C_Q2[q(b)]
+                style C_Q2 fill:#f8d7da,stroke-dasharray: 5 5
+                style Cut fill:#ffc107
+            end
+        `;
+        window.renderGraph('graph-cut-example', graphCutExample);
+
+        // Graph 5: Negation
+        const graphNegation = `
+        graph TD
+            Start["But: not(P)"] --> CallP[Appeler P]
+            CallP -->|P réussit| P_Success[Succès de P]
+            P_Success --> Not_Fail((Échec de not P))
+            
+            CallP -->|P échoue| P_Fail[Échec de P]
+            P_Fail --> Not_Success((Succès de not P))
+            
+            style Not_Fail fill:#f8d7da,stroke:#dc3545
+            style Not_Success fill:#d4edda,stroke:#28a745
+        `;
+        window.renderGraph('graph-negation', graphNegation);
+
+        // Graph 6: Factorial Execution
+        const graphFactorial = `
+        graph TD
+            Call1["factoriel(3, R)"] -->|Appel Récursif| Call2["factoriel(2, R1)"]
+            Call2 -->|Appel Récursif| Call3["factoriel(1, R2)"]
+            Call3 -->|Appel Récursif| Call4["factoriel(0, 1)"]
+            
+            Call4 -->|Retour: 1| Ret3["Res = 1 * 1 = 1"]
+            Ret3 -->|Retour: 1| Ret2["Res = 2 * 1 = 2"]
+            Ret2 -->|Retour: 2| Ret1["Res = 3 * 2 = 6"]
+            
+            style Call4 fill:#d4edda
+            style Ret1 fill:#d4edda,stroke:#28a745,stroke-width:2px
+        `;
+        window.renderGraph('graph-factorial', graphFactorial);
+
+        // Graph 7: Concat Execution
+        const graphConcat = `
+        graph TD
+            C1["concat([a,b], [c], Res)"] -- "X=a" --> C2["concat([b], [c], L3)"]
+            C2 -- "X=b" --> C3["concat([], [c], L3')"]
+            
+            C3 -- "Cas de base" --> Base["L3' = [c]"]
+            
+            Base -- "Remontée" --> R2["L3 = [b | [c]] = [b,c]"]
+            R2 -- "Remontée" --> R1["Res = [a | [b,c]] = [a,b,c]"]
+            
+            style Base fill:#fff3cd
+            style R1 fill:#d4edda,stroke:#28a745
+        `;
+        window.renderGraph('graph-concat', graphConcat);
+
+        // Graph 8: Appreciation Logic
+        const graphAppreciation = `
+        graph TD
+            Start["Note = 12"] --> Check1{"Note >= 16 ?"}
+            Check1 -- Non --> Check2{"Note >= 11 ?"}
+            Check1 -- Oui --> Res1[Trés Bien]
+            
+            Check2 -- Oui --> Cut2{{CUT !}}
+            Cut2 --> Res2[Bien]
+            
+            Check2 -- Non --> Check3{"Note >= 7 ?"}
+            
+            subgraph "Pruned by Cut"
+                Ignore1[Test: Note >= 7]
+                Ignore2[Test: Note >= 0]
+            end
+            
+            Cut2 -.->|Empêche| Ignore1
+            style Cut2 fill:#ffc107
+            style Res2 fill:#d4edda,stroke:#28a745
+        `;
+        window.renderGraph('graph-appreciation', graphAppreciation);
+
+    </script>
+</body>
+</html>
