@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours Interactif : Prolog Avancé (Arithmétique, Listes, Coupure)</title>
+    <style>
+        :root {
+            --color-primary: #4a6782;
+            --color-accent: #e67e22;
+            --color-text: #333333;
+            --color-bg: #fdfdfd;
+            --color-light-gray: #f4f4f4;
+            --color-border: #dddddd;
+            --font-body: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            --font-code: 'Courier New', monospace;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--color-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-light-gray);
+            padding-bottom: 8px;
+            margin-top: 40px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--color-accent);
+            margin-top: 30px;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background-color: #e7e7e7;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #c7254e;
+        }
+
+        pre {
+            background-color: var(--color-light-gray);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--color-border);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Callout Boxes */
+        .box {
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+            background-color: var(--color-light-gray);
+        }
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+        .box.definition { border-color: #4285F4; }
+        .box.definition .box-title { color: #4285F4; }
+        .box.example { border-color: #34A853; }
+        .box.example .box-title { color: #34A853; }
+        .box.warning { border-color: #FBBC05; background-color: #fffbeb;}
+        .box.warning .box-title { color: #FBBC05; }
+        .box.exercise { border-color: #EA4335; }
+        .box.exercise .box-title { color: #EA4335; }
+
+        /* Interactive Details for Exercises */
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 5px;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: var(--color-light-gray);
+        }
+        .solution {
+            padding: 10px 15px;
+            margin-top: 5px;
+            border: 1px dashed var(--color-border);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: var(--box-shadow);
+        }
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 10px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: var(--color-light-gray);
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Cours Interactif : Prolog Avancé</h1>
+
+        <nav id="toc">
+            <h3>Table des Matières</h3>
+            <ul>
+                <li><a href="#part1">Partie 1 : Arithmétique et Récursivité</a>
+                    <ul>
+                        <li><a href="#section1-1">1.1. Fonctions et Opérateurs Arithmétiques</a></li>
+                        <li><a href="#section1-2">1.2. Unification vs Évaluation</a></li>
+                        <li><a href="#section1-3">1.3. Comparaisons</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part2">Partie 2 : Les Listes</a>
+                    <ul>
+                        <li><a href="#section2-1">2.1. Structure et Notation</a></li>
+                        <li><a href="#section2-2">2.2. Fonctions Prédéfinies</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part3">Partie 3 : La Coupure (Cut !)</a>
+                    <ul>
+                        <li><a href="#section3-1">3.1. Définition et Utilité</a></li>
+                        <li><a href="#section3-2">3.2. Exemples d'Impact</a></li>
+                    </ul>
+                </li>
+                <li><a href="#part4">Partie 4 : Négation et Disjonction</a></li>
+                <li><a href="#part5">Partie 5 : Exercices Corrigés</a>
+                    <ul>
+                        <li><a href="#ex1">Exercice 1 : Arithmétique (Factoriel, Max)</a></li>
+                        <li><a href="#ex2">Exercice 2 : Listes (Longueur, Occurrences, Concat)</a></li>
+                        <li><a href="#ex3">Exercice 3 : La Coupure (Appréciation)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <h2 id="part1">Partie 1 : Arithmétique et Récursivité</h2>
+
+        <h3 id="section1-1">1.1. Fonctions et Opérateurs Arithmétiques</h3>
+        <p>En plus des opérateurs classiques (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>), Prolog dispose de fonctions spécifiques :</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fonction</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>X mod Y</code></td><td>Reste de la division entière de X par Y</td></tr>
+                <tr><td><code>X div Y</code></td><td>Quotient de la division entière de X par Y</td></tr>
+                <tr><td><code>abs(X)</code></td><td>Valeur absolue</td></tr>
+                <tr><td><code>sqrt(X)</code></td><td>Racine carrée</td></tr>
+                <tr><td><code>cos(X), sin(X)</code></td><td>Fonctions trigonométriques (X en radians)</td></tr>
+                <tr><td><code>exp(X), ln(X)</code></td><td>Exponentielle et Logarithme népérien</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="section1-2">1.2. Unification vs Évaluation</h3>
+        <p>C'est une distinction fondamentale en Prolog. Le signe <code>=</code> ne fait pas de calcul, il unifie des termes.</p>
+
+        <div class="box warning">
+            <div class="box-title">Attention : = vs IS</div>
+            <ul>
+                <li><strong><code>=</code> (Unification) :</strong> Vérifie si deux termes peuvent être rendus identiques. Ne calcule pas.
+                    <br><em>Exemple :</em> <code>X = 2 + 3</code> donne <code>X = 2+3</code> (terme composé), pas 5.
+                </li>
+                <li><strong><code>is</code> (Évaluation) :</strong> Évalue l'expression arithmétique à droite et unifie le résultat avec la variable à gauche.
+                    <br><em>Exemple :</em> <code>X is 2 + 3</code> donne <code>X = 5</code>.
+                </li>
+            </ul>
+        </div>
+
+        <div class="box example">
+            <div class="box-title">Exemples de dialogue</div>
+            <pre><code>?- 2 + 3 = 5.
+false. (Les termes sont différents : +(2,3) vs 5)
+
+?- X is 2 + 3.
+X = 5.
+
+?- X = 2 + 3.
+X = 2 + 3.</code></pre>
+        </div>
+
+        <h3 id="section1-3">1.3. Comparaisons</h3>
+        <p>Pour comparer des valeurs numériques (après évaluation), on utilise des opérateurs spécifiques :</p>
+        <ul>
+            <li><code>Expr1 =:= Expr2</code> : Égalité numérique (valeurs égales).</li>
+            <li><code>Expr1 =\= Expr2</code> : Différence numérique (valeurs différentes).</li>
+            <li><code>Expr1 < Expr2</code>, <code>Expr1 > Expr2</code> : Strictement inférieur/supérieur.</li>
+            <li><code>Expr1 =< Expr2</code>, <code>Expr1 >= Expr2</code> : Inférieur ou égal / Supérieur ou égal.</li>
+        </ul>
+
+        <h2 id="part2">Partie 2 : Les Listes</h2>
+
+        <h3 id="section2-1">2.1. Structure et Notation</h3>
+        <p>La liste est une séquence ordonnée d'éléments de longueur variable. Elle peut être vide (<code>[]</code>) ou composée d'une tête et d'un reste.</p>
+
+        <div class="box definition">
+            <div class="box-title">Notation [T | R]</div>
+            <ul>
+                <li><strong>T (Tête) :</strong> Le premier élément de la liste.</li>
+                <li><strong>R (Reste) :</strong> La liste contenant tous les autres éléments (ou vide).</li>
+            </ul>
+            La barre verticale <code>|</code> est l'opérateur de construction ("cons").
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Notation formelle (Point)</th>
+                    <th>Notation Cons (Interne)</th>
+                    <th>Syntaxe usuelle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><code>.(a, [])</code></td><td><code>[a | []]</code></td><td><code>[a]</code></td></tr>
+                <tr><td><code>.(a, .(b, []))</code></td><td><code>[a | [b | []]]</code></td><td><code>[a, b]</code></td></tr>
+                <tr><td><code>.(a, X)</code></td><td><code>[a | X]</code></td><td><code>[a | X]</code></td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="section2-2">2.2. Fonctions Prédéfinies</h3>
+        <ul>
+            <li><strong>length(L, N) :</strong> Vrai si N est la longueur de la liste L.</li>
+            <li><strong>member(X, L) :</strong> Vrai si X appartient à la liste L.</li>
+            <li><strong>append(L1, L2, L3) :</strong> Vrai si L3 est la concaténation de L1 et L2.
+                <br><em>Utile aussi pour découper des listes : <code>append(L1, L2, [a,b,c]).</code></em>
+            </li>
+            <li><strong>reverse(L1, L2) :</strong> Vrai si L2 est l'inverse de L1.</li>
+            <li><strong>permutation(L1, L2) :</strong> Vrai si L2 est une permutation de L1.</li>
+        </ul>
+
+        <h2 id="part3">Partie 3 : La Coupure (Cut !)</h2>
+
+        <h3 id="section3-1">3.1. Définition et Utilité</h3>
+        <p>La recherche systématique de toutes les solutions (backtracking) peut entraîner une explosion combinatoire. Le prédicat <strong>Cut</strong> (noté <code>!</code>) permet de contrôler cela.</p>
+
+        <div class="box definition">
+            <div class="box-title">La Coupure (!)</div>
+            Le Cut est un but qui réussit toujours. Lorsqu'il est franchi :
+            <ol>
+                <li>Il fige tous les choix faits depuis l'appel du prédicat qui contient le Cut.</li>
+                <li>Il empêche le retour en arrière (backtracking) sur les buts situés à sa <strong>gauche</strong> dans la règle.</li>
+            </ol>
+        </div>
+
+        <p><strong>Utilités principales :</strong></p>
+        <ul>
+            <li><strong>Solution unique :</strong> Arrêter la recherche dès qu'une solution est trouvée (optimisation).</li>
+            <li><strong>Exclusion :</strong> Si une règle s'applique (et contient un Cut), dire à Prolog de ne pas essayer les règles suivantes pour ce prédicat.</li>
+        </ul>
+
+        <h3 id="section3-2">3.2. Exemples d'Impact</h3>
+        <p>Considérons le programme :</p>
+        <pre><code>p(X,Y) :- q(X), r(X,Y).
+p(c,c1).
+q(a). q(b).
+r(a,a1). r(a,a2). r(b,b1).</code></pre>
+
+        <p>Si on ajoute un Cut :</p>
+        <ul>
+            <li><code>p(X,Y) :- q(X), r(X,Y), !.</code> : Donne <strong>une seule solution</strong> (la toute première trouvée), puis arrête tout.</li>
+            <li><code>p(X,Y) :- q(X), !, r(X,Y).</code> : Trouve un <code>q(X)</code> (le premier, 'a'), fige ce choix, puis cherche tous les <code>r(a, Y)</code> possibles. Il ne tentera jamais <code>q(b)</code>.</li>
+        </ul>
+
+        <h2 id="part4">Partie 4 : Négation et Disjonction</h2>
+
+        <h3 id="section4-1">La Négation (not)</h3>
+        <p>La négation en Prolog (<code>not(P)</code> ou <code>\+ P</code>) est une "négation par échec". Elle réussit si P échoue.</p>
+        <div class="box warning">
+            <div class="box-title">Limitation</div>
+            Pour que <code>not(P)</code> fonctionne correctement, toutes les variables de P doivent être instanciées (liées) au moment de l'appel.
+        </div>
+
+        <h3 id="section4-2">La Disjonction (;)</h3>
+        <p>Le point-virgule <code>;</code> signifie OU.</p>
+        <pre><code>tete :- p1 ; p2.</code></pre>
+        <p>Est équivalent à deux règles distinctes :</p>
+        <pre><code>tete :- p1.
+tete :- p2.</code></pre>
+
+        <h2 id="part5">Partie 5 : Exercices Corrigés</h2>
+
+        <h3 id="ex1">Exercice 1 : Arithmétique</h3>
+        <div class="box exercise">
+            <div class="box-title">Enoncés</div>
+            Définir les prédicats suivants :
+            <ol>
+                <li><code>max(X, Y, M)</code> : M est le maximum de X et Y.</li>
+                <li><code>factoriel(N, R)</code> : R est le factoriel de N.</li>
+            </ol>
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+<pre><code>/* Maximum avec Cut pour optimiser */
+max(X, Y, X) :- X >= Y, !.
+max(X, Y, Y).
+
+/* Factoriel (Récursif) */
+factoriel(0, 1).
+factoriel(N, R) :- 
+    N > 0, 
+    N1 is N - 1, 
+    factoriel(N1, R1), 
+    R is N * R1.</code></pre>
+                </div>
+            </details>
+        </div>
+
+        <h3 id="ex2">Exercice 2 : Listes</h3>
+        <div class="box exercise">
+            <div class="box-title">Enoncés</div>
+            Sans utiliser les fonctions prédéfinies, définir :
+            <ol>
+                <li><code>appartenance(X, L)</code> : vrai si X est dans L.</li>
+                <li><code>longueur(L, N)</code> : N est la taille de L.</li>
+                <li><code>concat(L1, L2, L3)</code> : concaténation de listes.</li>
+            </ol>
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+<pre><code>/* Appartenance */
+appartenance(X, [X|_]). /* Cas de base : X est la tête */
+appartenance(X, [_|Queue]) :- appartenance(X, Queue).
+
+/* Longueur */
+longueur([], 0).
+longueur([_|Queue], N) :- 
+    longueur(Queue, N1), 
+    N is N1 + 1.
+
+/* Concaténation */
+concat([], L, L).
+concat([X|L1], L2, [X|L3]) :- concat(L1, L2, L3).</code></pre>
+                </div>
+            </details>
+        </div>
+
+        <h3 id="ex3">Exercice 3 : La Coupure (Appréciation)</h3>
+        <div class="box exercise">
+            <div class="box-title">Enoncé</div>
+            Écrire un prédicat <code>appreciation(Note, Appr)</code> qui donne :
+            <ul>
+                <li>'Tres-bien' pour [16-20]</li>
+                <li>'Bien' pour [11-15]</li>
+                <li>'Passable' pour [7-10]</li>
+                <li>'Mauvais' pour [0-6]</li>
+            </ul>
+            Proposez une version optimisée avec le Cut.
+            <details>
+                <summary>Voir la solution</summary>
+                <div class="solution">
+<pre><code>/* Version avec Cut : l'ordre est important ! */
+appreciation(Note, 'Tres-bien') :- Note >= 16, !.
+appreciation(Note, 'Bien')      :- Note >= 11, !. /* Inutile de tester < 16 grâce au Cut précédent */
+appreciation(Note, 'Passable')  :- Note >= 7, !.
+appreciation(Note, 'Mauvais')   :- Note >= 0.     /* Par défaut si on arrive ici */</code></pre>
+                </div>
+            </details>
+        </div>
+
+    </d
